@@ -169,10 +169,11 @@ def predict():
         disease_title = standardize_disease_name(disease)
 
         # Get description
-        description = DESC_DF.loc[
-            DESC_DF["disease"].str.strip().str.title() == disease_title,
-            "description"
-        ].values[0] if not DESC_DF.empty else "No description available"
+        description = "No description available"
+        if not DESC_DF.empty:
+            desc_matches = DESC_DF[DESC_DF["disease"].str.strip().str.title() == disease_title]
+            if not desc_matches.empty:
+                description = desc_matches["description"].iloc[0]
 
         # Get precautions
         precautions = []
@@ -185,10 +186,11 @@ def predict():
                              if isinstance(p, str) and p.strip()]
 
         # Get severity
-        severity_info = SEVERITY_DF.loc[
-            SEVERITY_DF["disease"].str.strip().str.title() == disease_title,
-            "severity"
-        ].values[0] if not SEVERITY_DF.empty else "Unknown"
+        severity_info = "Unknown"
+        if not SEVERITY_DF.empty:
+            sev_matches = SEVERITY_DF[SEVERITY_DF["disease"].str.strip().str.title() == disease_title]
+            if not sev_matches.empty:
+                severity_info = sev_matches["severity"].iloc[0]
 
         return jsonify({
             "disease": disease_title,
