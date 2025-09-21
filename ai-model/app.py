@@ -173,26 +173,54 @@ def predict():
         # Get description
         description = "No description available"
         if not DESC_DF.empty:
-            desc_matches = DESC_DF[DESC_DF["disease"].str.strip().str.title() == disease_title]
-            if not desc_matches.empty:
-                description = desc_matches["description"].iloc[0]
+            # Try different column names that might exist
+            disease_col = None
+            for col in ["Disease", "disease"]:
+                if col in DESC_DF.columns:
+                    disease_col = col
+                    break
+            
+            if disease_col:
+                desc_matches = DESC_DF[DESC_DF[disease_col].str.strip().str.title() == disease_title]
+                if not desc_matches.empty:
+                    desc_col = "Description" if "Description" in DESC_DF.columns else "description"
+                    if desc_col in DESC_DF.columns:
+                        description = desc_matches[desc_col].iloc[0]
 
         # Get precautions
         precautions = []
         if not PRECAUTION_DF.empty:
-            prec_row = PRECAUTION_DF[
-                PRECAUTION_DF["disease"].str.strip().str.title() == disease_title
-            ]
-            if not prec_row.empty:
-                precautions = [p for p in prec_row.iloc[0, 1:] 
-                             if isinstance(p, str) and p.strip()]
+            # Try different column names that might exist
+            disease_col = None
+            for col in ["Disease", "disease"]:
+                if col in PRECAUTION_DF.columns:
+                    disease_col = col
+                    break
+                    
+            if disease_col:
+                prec_row = PRECAUTION_DF[
+                    PRECAUTION_DF[disease_col].str.strip().str.title() == disease_title
+                ]
+                if not prec_row.empty:
+                    precautions = [p for p in prec_row.iloc[0, 1:] 
+                                 if isinstance(p, str) and p.strip()]
 
         # Get severity
         severity_info = "Unknown"
         if not SEVERITY_DF.empty:
-            sev_matches = SEVERITY_DF[SEVERITY_DF["disease"].str.strip().str.title() == disease_title]
-            if not sev_matches.empty:
-                severity_info = sev_matches["severity"].iloc[0]
+            # Try different column names that might exist
+            disease_col = None
+            for col in ["Disease", "disease"]:
+                if col in SEVERITY_DF.columns:
+                    disease_col = col
+                    break
+                    
+            if disease_col:
+                sev_matches = SEVERITY_DF[SEVERITY_DF[disease_col].str.strip().str.title() == disease_title]
+                if not sev_matches.empty:
+                    sev_col = "Severity" if "Severity" in SEVERITY_DF.columns else "severity"
+                    if sev_col in SEVERITY_DF.columns:
+                        severity_info = sev_matches[sev_col].iloc[0]
 
         return jsonify({
             "disease": disease_title,
