@@ -2,6 +2,77 @@
 
 A comprehensive MERN-based healthcare application with AI-powered symptom analysis, doctor consultations, and payment integration.
 
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js (v18+)
+- Python (v3.8+)
+- MongoDB (local or cloud)
+
+### Option 1: Automatic Setup (Windows)
+```bash
+# Run the startup script
+./start-services.bat
+```
+
+### Option 2: Manual Setup
+
+#### 1. Start AI Model Service
+```bash
+cd ai-model
+pip install -r requirements.txt
+python app.py
+```
+The AI model will be available at `http://localhost:5001`
+
+#### 2. Start Backend Server
+```bash
+cd server
+npm install
+npm run dev
+```
+The server will be available at `http://localhost:5000`
+
+#### 3. Start Frontend Client
+```bash
+cd client
+npm install
+npm run dev
+```
+The client will be available at `http://localhost:5173`
+
+## ✅ Recent Fixes Applied
+
+- ✅ Fixed Python dependency compatibility for Python 3.13
+- ✅ Resolved Mongoose duplicate index warnings  
+- ✅ Fixed React component import paths
+- ✅ Added proper environment variable configuration
+- ✅ Removed deprecated MongoDB connection options
+- ✅ Fixed CORS configuration for client-server communication
+- ✅ Updated npm dependencies and resolved security vulnerabilities
+- ✅ Fixed AI model error handling and data processing
+
+## 🔧 Configuration
+
+### Environment Variables
+
+#### Server (.env)
+```env
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=mongodb://localhost:27017/smarthealthbot
+JWT_SECRET=your_super_secret_jwt_key_change_this_in_production_2024
+AI_MODEL_URL=http://localhost:5001
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+```
+
+#### Client (.env)
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_AI_MODEL_URL=http://localhost:5001
+```
+
 ## 🚀 Features
 
 ### Core Features
