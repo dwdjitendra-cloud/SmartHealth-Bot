@@ -9,11 +9,16 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
-// Initialize Razorpay
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+// Initialize Razorpay only if credentials are provided
+let razorpay = null;
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+  razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+  });
+} else {
+  console.warn('⚠️  Razorpay credentials not configured. Payment features will be disabled.');
+}
 
 
 /**
@@ -80,6 +85,13 @@ router.post('/create-order', auth, [
         consultationType
       }
     };
+
+    if (!razorpay) {
+      return res.status(503).json({
+        message: 'Payment service not configured',
+        error: 'Razorpay credentials are missing'
+      });
+    }
 
     const razorpayOrder = await razorpay.orders.create(options);
 

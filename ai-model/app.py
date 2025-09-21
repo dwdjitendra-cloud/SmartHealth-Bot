@@ -171,31 +171,28 @@ def predict():
         # Get description
         description = "No description available"
         if not DESC_DF.empty:
-            desc_matches = DESC_DF[DESC_DF["disease"].str.strip().str.title() == disease_title]
+            desc_matches = DESC_DF[DESC_DF["Disease"].str.strip().str.title() == disease_title]
             if not desc_matches.empty:
-                description = desc_matches["description"].iloc[0]
+                description = desc_matches["Description"].iloc[0]
 
         # Get precautions
         precautions = []
         if not PRECAUTION_DF.empty:
             prec_row = PRECAUTION_DF[
-                PRECAUTION_DF["disease"].str.strip().str.title() == disease_title
+                PRECAUTION_DF["Disease"].str.strip().str.title() == disease_title
             ]
             if not prec_row.empty:
                 precautions = [p for p in prec_row.iloc[0, 1:] 
                              if isinstance(p, str) and p.strip()]
 
-        # Get severity
-        severity_info = "Unknown"
-        if not SEVERITY_DF.empty:
-            sev_matches = SEVERITY_DF[SEVERITY_DF["disease"].str.strip().str.title() == disease_title]
-            if not sev_matches.empty:
-                severity_info = sev_matches["severity"].iloc[0]
+        # Get severity - simplified for now
+        severity_info = "medium"
 
         return jsonify({
             "disease": disease_title,
             "description": description,
             "precautions": precautions,
+            "home_remedies": ["Rest", "Stay hydrated", "Monitor symptoms"],  # Default home remedies
             "severity": severity_info,
             "matched_symptoms": valid_symptoms,
             "confidence": float(MODEL.predict_proba([features]).max())
