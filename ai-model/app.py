@@ -181,7 +181,12 @@ def predict():
                     break
             
             if disease_col:
+                # Try exact match first, then partial match
                 desc_matches = DESC_DF[DESC_DF[disease_col].str.strip().str.title() == disease_title]
+                if desc_matches.empty:
+                    # Try case-insensitive partial match
+                    desc_matches = DESC_DF[DESC_DF[disease_col].str.lower().str.contains(disease_title.lower(), na=False)]
+                
                 if not desc_matches.empty:
                     desc_col = "Description" if "Description" in DESC_DF.columns else "description"
                     if desc_col in DESC_DF.columns:
@@ -198,29 +203,39 @@ def predict():
                     break
                     
             if disease_col:
+                # Try exact match first, then partial match
                 prec_row = PRECAUTION_DF[
                     PRECAUTION_DF[disease_col].str.strip().str.title() == disease_title
                 ]
+                if prec_row.empty:
+                    # Try case-insensitive partial match
+                    prec_row = PRECAUTION_DF[
+                        PRECAUTION_DF[disease_col].str.lower().str.contains(disease_title.lower(), na=False)
+                    ]
+                
                 if not prec_row.empty:
                     precautions = [p for p in prec_row.iloc[0, 1:] 
                                  if isinstance(p, str) and p.strip()]
 
-        # Get severity
+        # Calculate severity based on symptoms' weights
         severity_info = "Unknown"
-        if not SEVERITY_DF.empty:
-            # Try different column names that might exist
-            disease_col = None
-            for col in ["Disease", "disease"]:
-                if col in SEVERITY_DF.columns:
-                    disease_col = col
-                    break
-                    
-            if disease_col:
-                sev_matches = SEVERITY_DF[SEVERITY_DF[disease_col].str.strip().str.title() == disease_title]
-                if not sev_matches.empty:
-                    sev_col = "Severity" if "Severity" in SEVERITY_DF.columns else "severity"
-                    if sev_col in SEVERITY_DF.columns:
-                        severity_info = sev_matches[sev_col].iloc[0]
+        if not SEVERITY_DF.empty and valid_symptoms:
+            # Get weights for matched symptoms
+            symptom_weights = []
+            for symptom in valid_symptoms:
+                weight_matches = SEVERITY_DF[SEVERITY_DF["Symptom"].str.strip().str.lower() == symptom.lower()]
+                if not weight_matches.empty:
+                    weight = weight_matches["weight"].iloc[0] if "weight" in SEVERITY_DF.columns else 1
+                    symptom_weights.append(weight)
+            
+            if symptom_weights:
+                avg_weight = sum(symptom_weights) / len(symptom_weights)
+                if avg_weight >= 5:
+                    severity_info = "High"
+                elif avg_weight >= 3:
+                    severity_info = "Medium"
+                elif avg_weight >= 1:
+                    severity_info = "Low"
 
         return jsonify({
             "disease": disease_title,
