@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import re
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from sklearn.ensemble import RandomForestClassifier
@@ -37,6 +38,67 @@ def clean_symptom(s):
         return ""
     return str(s).strip().lower().replace(" ", "_")
 
+def enhance_symptom_matching(input_symptoms, available_symptoms):
+    """Enhanced symptom matching using synonyms and partial matching"""
+    # Create synonym mapping
+    symptom_synonyms = {
+        "fever": ["fever", "high_temperature", "pyrexia"],
+        "headache": ["headache", "head_pain", "cephalgia"],
+        "cough": ["cough", "coughing"],
+        "tired": ["fatigue", "weakness", "tiredness"],
+        "fatigue": ["fatigue", "weakness", "tired", "tiredness"],
+        "body_aches": ["muscle_aches", "joint_pain", "body_pain"],
+        "body_pain": ["muscle_aches", "joint_pain", "body_aches"],
+        "stomach_pain": ["abdominal_pain", "belly_pain"],
+        "nausea": ["nausea", "vomiting"],
+        "runny_nose": ["runny_nose", "nasal_congestion"],
+        "sore_throat": ["throat_irritation", "throat_pain"],
+        "dizziness": ["dizziness", "vertigo"],
+        "shortness_of_breath": ["breathlessness", "difficulty_breathing"],
+        "chest_pain": ["chest_pain", "chest_tightness"],
+        "back_pain": ["back_pain", "lower_back_pain"],
+        "joint_pain": ["joint_pain", "arthritis", "stiffness"],
+        "skin_rash": ["skin_rash", "rash"],
+        "itching": ["itching", "pruritus"],
+        "sweating": ["excessive_sweating", "night_sweats"],
+        "loss_of_appetite": ["loss_of_appetite", "poor_appetite"],
+        "weight_loss": ["weight_loss", "unexplained_weight_loss"],
+        "difficulty_sleeping": ["insomnia", "sleep_disturbance"],
+        "anxiety": ["anxiety", "nervousness", "worry"]
+    }
+    
+    matched_symptoms = []
+    
+    for symptom in input_symptoms:
+        # Direct match
+        if symptom in available_symptoms:
+            matched_symptoms.append(symptom)
+            continue
+            
+        # Check synonyms
+        found_match = False
+        for main_symptom, synonyms in symptom_synonyms.items():
+            if symptom in synonyms:
+                # Check if any of the synonyms exist in available symptoms
+                for syn in synonyms:
+                    if syn in available_symptoms:
+                        matched_symptoms.append(syn)
+                        found_match = True
+                        break
+                if found_match:
+                    break
+        
+        if found_match:
+            continue
+            
+        # Partial matching - find symptoms that contain the input or vice versa
+        for available_symptom in available_symptoms:
+            if (symptom in available_symptom or available_symptom in symptom) and len(symptom) > 2:
+                matched_symptoms.append(available_symptom)
+                break
+    
+    return list(set(matched_symptoms))  # Remove duplicates
+
 def standardize_disease_name(name):
     """Standardize disease name formatting"""
     if pd.isna(name):
@@ -72,13 +134,15 @@ def load_data():
         )
         dataset["Disease"] = dataset["Disease"].apply(standardize_disease_name)
 
-        # Process other datasets
-        for df in [desc_df, precaution_df, severity_df]:
-            if "disease" in df.columns:
-                df["disease"] = df["disease"].apply(standardize_disease_name)
+        # Process other datasets - do not modify column names, only clean data
+        for df in [desc_df, precaution_df]:
             for col in df.columns:
-                if df[col].dtype == 'object':
-                    df[col] = df[col].apply(clean_symptom)
+                if df[col].dtype == 'object' and col not in ["Disease", "Description"]:
+                    df[col] = df[col].apply(lambda x: str(x).strip() if pd.notna(x) else "")
+        
+        # For severity dataset, clean symptom names to match our format
+        if "Symptom" in severity_df.columns:
+            severity_df["Symptom"] = severity_df["Symptom"].apply(clean_symptom)
 
         logger.info("✅ Datasets loaded and cleaned successfully")
         return dataset, desc_df, precaution_df, severity_df
@@ -153,9 +217,22 @@ def predict():
                 "example": {"symptoms": ["fever", "headache"]}
             }), 400
 
-        # Clean and validate input symptoms
-        input_symptoms = [clean_symptom(s) for s in data.get("symptoms", [])]
-        valid_symptoms = [s for s in input_symptoms if s and s in SYMPTOM_LIST]
+        # Handle both string and array input formats
+        symptoms_input = data.get("symptoms", [])
+        if isinstance(symptoms_input, str):
+            # Parse string into individual symptoms using regex
+            import re
+            input_symptoms = [clean_symptom(s.strip()) for s in re.split(r'[,;.\n]+', symptoms_input) if s.strip()]
+        elif isinstance(symptoms_input, list):
+            input_symptoms = [clean_symptom(s) for s in symptoms_input]
+        else:
+            return jsonify({
+                "error": "Symptoms must be a string or array",
+                "example": {"symptoms": ["fever", "headache"]}
+            }), 400
+
+        # Enhanced symptom matching
+        valid_symptoms = enhance_symptom_matching(input_symptoms, SYMPTOM_LIST)
         
         if not valid_symptoms:
             return jsonify({
@@ -172,35 +249,76 @@ def predict():
 
         # Get description
         description = "No description available"
-        if not DESC_DF.empty:
-            desc_matches = DESC_DF[DESC_DF["disease"].str.strip().str.title() == disease_title]
+        if not DESC_DF.empty and "Disease" in DESC_DF.columns:
+            desc_matches = DESC_DF[DESC_DF["Disease"].str.strip().str.title() == disease_title]
             if not desc_matches.empty:
-                description = desc_matches["description"].iloc[0]
+                description = desc_matches["Description"].iloc[0]
 
         # Get precautions
         precautions = []
-        if not PRECAUTION_DF.empty:
+        if not PRECAUTION_DF.empty and "Disease" in PRECAUTION_DF.columns:
             prec_row = PRECAUTION_DF[
-                PRECAUTION_DF["disease"].str.strip().str.title() == disease_title
+                PRECAUTION_DF["Disease"].str.strip().str.title() == disease_title
             ]
             if not prec_row.empty:
                 precautions = [p for p in prec_row.iloc[0, 1:] 
                              if isinstance(p, str) and p.strip()]
 
-        # Get severity
-        severity_info = "Unknown"
-        if not SEVERITY_DF.empty:
-            sev_matches = SEVERITY_DF[SEVERITY_DF["disease"].str.strip().str.title() == disease_title]
-            if not sev_matches.empty:
-                severity_info = sev_matches["severity"].iloc[0]
+        # Get severity (this dataset has different structure - Symptom,weight)
+        severity_info = "low"  # default
+        if not SEVERITY_DF.empty and valid_symptoms:
+            # Calculate severity based on symptom weights
+            total_weight = 0
+            for symptom in valid_symptoms:
+                if "Symptom" in SEVERITY_DF.columns:
+                    weight_matches = SEVERITY_DF[SEVERITY_DF["Symptom"].str.contains(symptom, case=False, na=False)]
+                    if not weight_matches.empty:
+                        total_weight += weight_matches["weight"].iloc[0]
+            
+            # Determine severity based on total weight
+            if total_weight >= 15:
+                severity_info = "critical"
+            elif total_weight >= 10:
+                severity_info = "high"
+            elif total_weight >= 5:
+                severity_info = "medium"
+            else:
+                severity_info = "low"
+
+        # Get home remedies (use precautions as home remedies for now, but make it more specific)
+        home_remedies = []
+        if precautions:
+            # Create home remedies based on precautions
+            home_remedies = [
+                "Rest and get adequate sleep",
+                "Stay hydrated by drinking plenty of water",
+                "Maintain good hygiene",
+                "Follow a balanced diet"
+            ]
+            # Add specific remedies based on disease type
+            if 'fever' in disease_title.lower():
+                home_remedies.extend(["Apply cool compress", "Take lukewarm baths"])
+            elif 'cold' in disease_title.lower() or 'cough' in disease_title.lower():
+                home_remedies.extend(["Drink warm fluids", "Use honey for sore throat"])
+            elif 'headache' in disease_title.lower():
+                home_remedies.extend(["Apply cold or warm compress", "Practice relaxation techniques"])
+
+        # Calculate confidence with minimum threshold
+        confidence_score = float(MODEL.predict_proba([features]).max())
+        # Ensure minimum confidence for valid predictions
+        if confidence_score < 0.3:
+            confidence_score = max(0.3, confidence_score)  # Set minimum confidence
 
         return jsonify({
             "disease": disease_title,
             "description": description,
             "precautions": precautions,
+            "home_remedies": home_remedies,
             "severity": severity_info,
             "matched_symptoms": valid_symptoms,
-            "confidence": float(MODEL.predict_proba([features]).max())
+            "confidence": confidence_score,
+            "total_symptoms_matched": len(valid_symptoms),
+            "available_symptoms_count": len(SYMPTOM_LIST)
         })
 
     except Exception as e:
@@ -209,6 +327,26 @@ def predict():
         return jsonify({
             "error": "Prediction failed",
             "details": str(e)
+        }), 500
+
+@app.route("/health", methods=["GET"])
+def health_check():
+    """Health check endpoint for the AI service"""
+    try:
+        status = {
+            "status": "healthy",
+            "service": "SmartHealthBot AI Model",
+            "timestamp": pd.Timestamp.now().isoformat(),
+            "model_loaded": MODEL is not None,
+            "symptoms_available": len(SYMPTOM_LIST) if SYMPTOM_LIST else 0,
+            "diseases_available": len(LABEL_ENCODER.classes_) if LABEL_ENCODER else 0
+        }
+        return jsonify(status)
+    except Exception as e:
+        logger.error(f"❌ Health check error: {e}")
+        return jsonify({
+            "status": "unhealthy",
+            "error": str(e)
         }), 500
 
 @app.route("/symptoms", methods=["GET"])

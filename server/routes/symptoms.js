@@ -7,6 +7,96 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 
 /**
+ * @route   POST /api/symptoms/test
+ * @desc    Test symptoms analysis without authentication (for testing)
+ * @access  Public
+ */
+router.post('/test', [
+  body('symptoms')
+    .trim()
+    .isLength({ min: 3, max: 1000 })
+    .withMessage('Symptoms description must be between 3 and 1000 characters')
+], async (req, res) => {
+  try {
+    // Validate input
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        message: 'Validation failed',
+        errors: errors.array()
+      });
+    }
+
+    const { symptoms } = req.body;
+
+    // Parse symptoms from text to array (split by common delimiters)
+    let symptomList;
+    if (Array.isArray(symptoms)) {
+      symptomList = symptoms;
+    } else {
+      // Convert text to array by splitting on common delimiters
+      symptomList = symptoms
+        .split(/[,;.\n]+/)
+        .map(s => s.trim().toLowerCase())
+        .filter(s => s.length > 0);
+    }
+
+    // Call AI model service
+    let aiResponse;
+    try {
+      const response = await axios.post(`${process.env.AI_MODEL_URL}/predict`, {
+        symptoms: symptomList
+      }, {
+        timeout: 30000, // 30 second timeout
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      aiResponse = response.data;
+    } catch (aiError) {
+      console.error('AI service error:', aiError.message);
+      
+      // Fallback response if AI service is unavailable
+      aiResponse = {
+        disease: 'Service Unavailable',
+        description: 'AI analysis service is currently unavailable. Please try again later or consult a healthcare professional.',
+        precautions: ['Consult a healthcare professional', 'Monitor your symptoms', 'Rest and stay hydrated'],
+        home_remedies: ['Rest', 'Stay hydrated', 'Monitor symptoms'],
+        confidence: 0.0
+      };
+    }
+
+    // Determine severity based on symptoms and disease
+    const severity = determineSeverity(symptoms, aiResponse.disease);
+    const consultationRecommended = severity === 'high' || severity === 'critical';
+
+    res.json({
+      message: 'Symptoms analyzed successfully (test mode)',
+      analysis: {
+        disease: aiResponse.disease,
+        description: aiResponse.description,
+        precautions: aiResponse.precautions,
+        homeRemedies: aiResponse.home_remedies,
+        confidence: aiResponse.confidence,
+        severity,
+        consultationRecommended,
+        matched_symptoms: aiResponse.matched_symptoms,
+        total_symptoms_matched: aiResponse.total_symptoms_matched,
+        timestamp: new Date().toISOString()
+      }
+    });
+
+  } catch (error) {
+    console.error('Symptom analysis error:', error);
+    res.status(500).json({
+      message: 'Server error during symptom analysis',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+/**
  * @route   POST /api/symptoms/analyze
  * @desc    Analyze symptoms using AI model
  * @access  Private
