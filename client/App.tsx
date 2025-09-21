@@ -60,6 +60,9 @@ function App() {
                 </PublicRoute>
               } />
               
+              {/* Demo Route - No Authentication Required */}
+              <Route path="/demo" element={<SymptomChecker />} />
+              
               {/* Protected Routes */}
               <Route path="/dashboard" element={
                 <ProtectedRoute>
