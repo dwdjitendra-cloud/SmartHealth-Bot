@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartHealth-Bot AI Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            min-height: 100px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        .disease-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffeb3b;
+            margin-bottom: 10px;
+        }
+        .confidence {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .severity {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .severity.low { background: #4CAF50; }
+        .severity.medium { background: #FF9800; }
+        .severity.high { background: #f44336; }
+        .severity.critical { background: #9C27B0; }
+        .section {
+            margin: 20px 0;
+        }
+        .section h3 {
+            color: #ffeb3b;
+            margin-bottom: 10px;
+        }
+        .list {
+            list-style: none;
+            padding: 0;
+        }
+        .list li {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 5px 0;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        .loading {
+            text-align: center;
+            font-size: 18px;
+            display: none;
+        }
+        .examples {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .example-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .example-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏥 SmartHealth-Bot AI Analysis Demo</h1>
+        
+        <div class="examples">
+            <h3>Quick Examples (Click to Try):</h3>
+            <button class="example-btn" onclick="setExample('fever, headache, cough, fatigue')">Common Cold</button>
+            <button class="example-btn" onclick="setExample('severe headache, nausea, sensitivity to light')">Migraine</button>
+            <button class="example-btn" onclick="setExample('chest pain, shortness of breath, dizziness')">Heart Issues</button>
+            <button class="example-btn" onclick="setExample('stomach pain, nausea, vomiting, diarrhea')">Gastric Problems</button>
+            <button class="example-btn" onclick="setExample('high fever, body aches, extreme fatigue, chills')">Flu Symptoms</button>
+        </div>
+
+        <div class="input-group">
+            <label for="symptoms">Describe Your Symptoms:</label>
+            <textarea id="symptoms" placeholder="Enter your symptoms separated by commas, e.g., fever, headache, cough, fatigue, body aches..."></textarea>
+        </div>
+
+        <button onclick="analyzeSymptoms()" id="analyzeBtn">🔍 Analyze Symptoms</button>
+
+        <div class="loading" id="loading">
+            🤖 AI is analyzing your symptoms...
+        </div>
+
+        <div class="result" id="result">
+            <div class="disease-name" id="diseaseName"></div>
+            <div class="confidence">
+                Confidence: <span id="confidence"></span>% | 
+                Severity: <span class="severity" id="severity"></span>
+            </div>
+            
+            <div class="section">
+                <p id="description"></p>
+            </div>
+
+            <div class="section">
+                <h3>📋 Precautions</h3>
+                <ul class="list" id="precautions"></ul>
+            </div>
+
+            <div class="section">
+                <h3>🏠 Home Remedies</h3>
+                <ul class="list" id="homeRemedies"></ul>
+            </div>
+
+            <div class="section">
+                <h3>🎯 Matched Symptoms</h3>
+                <ul class="list" id="matchedSymptoms"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setExample(symptoms) {
+            document.getElementById('symptoms').value = symptoms;
+        }
+
+        async function analyzeSymptoms() {
+            const symptoms = document.getElementById('symptoms').value.trim();
+            
+            if (!symptoms) {
+                alert('Please enter some symptoms first!');
+                return;
+            }
+
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+
+            // Show loading state
+            analyzeBtn.disabled = true;
+            loading.style.display = 'block';
+            result.style.display = 'none';
+
+            try {
+                const response = await fetch('http://localhost:5000/api/symptoms/test', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ symptoms: symptoms })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayResults(data.analysis);
+                } else {
+                    throw new Error(data.message || 'Analysis failed');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+                console.error('Analysis error:', error);
+            } finally {
+                // Hide loading state
+                analyzeBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+
+        function displayResults(analysis) {
+            // Display disease name
+            document.getElementById('diseaseName').textContent = analysis.disease;
+            
+            // Display confidence
+            const confidence = Math.round(analysis.confidence * 100);
+            document.getElementById('confidence').textContent = confidence;
+            
+            // Display severity
+            const severityEl = document.getElementById('severity');
+            severityEl.textContent = analysis.severity;
+            severityEl.className = 'severity ' + analysis.severity;
+            
+            // Display description
+            document.getElementById('description').textContent = analysis.description;
+            
+            // Display precautions
+            const precautionsEl = document.getElementById('precautions');
+            precautionsEl.innerHTML = '';
+            analysis.precautions.forEach(precaution => {
+                const li = document.createElement('li');
+                li.textContent = precaution;
+                precautionsEl.appendChild(li);
+            });
+            
+            // Display home remedies
+            const remediesEl = document.getElementById('homeRemedies');
+            remediesEl.innerHTML = '';
+            analysis.homeRemedies.forEach(remedy => {
+                const li = document.createElement('li');
+                li.textContent = remedy;
+                remediesEl.appendChild(li);
+            });
+            
+            // Display matched symptoms
+            const symptomsEl = document.getElementById('matchedSymptoms');
+            symptomsEl.innerHTML = '';
+            analysis.matched_symptoms.forEach(symptom => {
+                const li = document.createElement('li');
+                li.textContent = symptom.replace(/_/g, ' ');
+                symptomsEl.appendChild(li);
+            });
+            
+            // Show results
+            document.getElementById('result').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('symptoms').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                analyzeSymptoms();
+            }
+        });
+    </script>
+</body>
+</html>
