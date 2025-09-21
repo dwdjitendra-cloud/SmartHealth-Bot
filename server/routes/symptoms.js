@@ -29,11 +29,23 @@ router.post('/analyze', auth, [
 
     const { symptoms } = req.body;
 
+    // Parse symptoms from text to array (split by common delimiters)
+    let symptomList;
+    if (Array.isArray(symptoms)) {
+      symptomList = symptoms;
+    } else {
+      // Convert text to array by splitting on common delimiters
+      symptomList = symptoms
+        .split(/[,;.\n]+/)
+        .map(s => s.trim().toLowerCase())
+        .filter(s => s.length > 0);
+    }
+
     // Call AI model service
     let aiResponse;
     try {
       const response = await axios.post(`${process.env.AI_MODEL_URL}/predict`, {
-        symptoms: symptoms
+        symptoms: symptomList
       }, {
         timeout: 30000, // 30 second timeout
         headers: {

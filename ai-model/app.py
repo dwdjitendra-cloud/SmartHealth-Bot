@@ -93,14 +93,16 @@ def train_model(dataset):
     try:
         logger.info("📊 Training model...")
         
-        # Prepare features
+        # Prepare features more efficiently
         all_symptoms = sorted({sym for sublist in dataset["symptoms"] for sym in sublist})
         logger.info(f"Found {len(all_symptoms)} unique symptoms")
         
+        # Create feature matrix more efficiently using pd.concat
+        features_dict = {}
         for sym in all_symptoms:
-            dataset[sym] = dataset["symptoms"].apply(lambda x: 1 if sym in x else 0)
-
-        X = dataset[all_symptoms]
+            features_dict[sym] = dataset["symptoms"].apply(lambda x: 1 if sym in x else 0)
+        
+        X = pd.DataFrame(features_dict)
         le = LabelEncoder()
         y = le.fit_transform(dataset["Disease"])
 
