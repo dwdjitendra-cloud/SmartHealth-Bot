@@ -24,14 +24,8 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     // Enable source maps for debugging
     sourcemap: true,
-    // Minify for production
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console logs in production
-        drop_debugger: true,
-      },
-    },
+    // Use esbuild for minification (faster and built-in)
+    minify: 'esbuild',
   },
   server: {
     // Enable hot module replacement
