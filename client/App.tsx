@@ -1,8 +1,9 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './src/contexts/AuthContext';
 import { useAuth } from './src/contexts/AuthContext';
+import ErrorBoundary from './src/components/ErrorBoundary';
 import Navbar from './Navbar';
 import Home from './src/pages/Home';
 import Login from './src/pages/Login';
@@ -11,6 +12,13 @@ import Dashboard from './src/pages/Dashboard';
 import SymptomChecker from './src/pages/SymptomChecker';
 import Doctors from './src/pages/Doctors';
 import Profile from './src/pages/Profile';
+import AIHealthcare from './src/pages/AIHealthcare';
+import HealthcareDashboard from './src/pages/HealthcareDashboard';
+import AdvancedHealthDashboard from './src/pages/AdvancedHealthDashboard';
+import VitalSignsDashboard from './src/pages/VitalSignsDashboard';
+import SmartMedicationDashboard from './src/pages/SmartMedicationDashboard';
+import TelemedicineDashboard from './src/pages/TelemedicineDashboard';
+import MentalHealthDashboard from './src/pages/MentalHealthDashboard';
 import LoadingSpinner from './LoadingSpinner';
 
 interface RouteProps {
@@ -28,24 +36,25 @@ function ProtectedRoute({ children }: RouteProps) {
   return user ? <>{children}</> : <Navigate to="/login" />;
 }
 
-// Public Route Component (redirect to dashboard if logged in)
+// Public Route Component (allow access regardless of login status)
 const PublicRoute = ({ children }: RouteProps) => {
-  const { user, loading } = useAuth();
+  const { loading } = useAuth();
   
   if (loading) {
     return <LoadingSpinner />;
   }
   
-  return user ? <Navigate to="/dashboard" /> : <>{children}</>;
+  return <>{children}</>;
 };
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="min-h-screen bg-gray-50">
+    <ErrorBoundary>
+      <AuthProvider>
+        <Router>
+        <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #1a1c23 0%, #2d3142 50%, #1f2937 100%)' }}>
           <Navbar />
-          <main className="pt-16">
+          <main className="pt-16 lg:pt-0 lg:ml-72 transition-all duration-300">{/* Updated to lighter neutral gradient for better contrast */}
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Home />} />
@@ -74,9 +83,51 @@ function App() {
                   <SymptomChecker />
                 </ProtectedRoute>
               } />
+              <Route path="/ai-healthcare" element={
+                <ProtectedRoute>
+                  <AIHealthcare />
+                </ProtectedRoute>
+              } />
+              <Route path="/healthcare-dashboard" element={
+                <ProtectedRoute>
+                  <HealthcareDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/health-risk" element={
+                <ProtectedRoute>
+                  <AdvancedHealthDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/vital-signs" element={
+                <ProtectedRoute>
+                  <VitalSignsDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/medications" element={
+                <ProtectedRoute>
+                  <SmartMedicationDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/telemedicine" element={
+                <ProtectedRoute>
+                  <TelemedicineDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/mental-health" element={
+                <ProtectedRoute>
+                  <MentalHealthDashboard />
+                </ProtectedRoute>
+              } />
               <Route path="/doctors" element={
                 <ProtectedRoute>
                   <Doctors />
+                </ProtectedRoute>
+              } />
+              
+              {/* Legacy routes for backward compatibility */}
+              <Route path="/health-dashboard" element={
+                <ProtectedRoute>
+                  <AdvancedHealthDashboard />
                 </ProtectedRoute>
               } />
               <Route path="/profile" element={
@@ -102,6 +153,7 @@ function App() {
         </div>
       </Router>
     </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

@@ -19,6 +19,7 @@ interface AuthContextType {
   logout: () => void;
   loading: boolean;
   updateProfile: (userData: Partial<User>) => Promise<boolean>;
+  refreshToken: () => Promise<boolean>;
 }
 
 interface RegisterData {
@@ -33,7 +34,7 @@ interface RegisterData {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Configure axios defaults
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 axios.defaults.baseURL = API_BASE_URL;
 
 export const useAuth = () => {
@@ -69,13 +70,44 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           
           // Verify token is still valid
           await axios.get('/auth/me');
-        } catch (error) {
-          console.error('Token validation failed:', error);
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          setToken(null);
-          setUser(null);
-          delete axios.defaults.headers.common['Authorization'];
+        } catch (error: any) {
+          // For 401 errors, try to refresh token before clearing session
+          if (error?.response?.status === 401) {
+            console.log('Token expired, attempting refresh...');
+            
+            // Try to refresh token
+            try {
+              const response = await axios.post('/auth/refresh');
+              const { token: newToken, user: userData } = response.data;
+              
+              // Update stored token
+              localStorage.setItem('token', newToken);
+              localStorage.setItem('user', JSON.stringify(userData));
+              
+              // Update state
+              setToken(newToken);
+              setUser(userData);
+              
+              // Update axios header
+              axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+              
+              console.log('Token refreshed successfully');
+            } catch (refreshError) {
+              console.log('Token refresh failed, clearing session');
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+              setToken(null);
+              setUser(null);
+              delete axios.defaults.headers.common['Authorization'];
+            }
+          } else {
+            console.error('Token validation failed:', error);
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            setToken(null);
+            setUser(null);
+            delete axios.defaults.headers.common['Authorization'];
+          }
         }
       }
       setLoading(false);
@@ -181,6 +213,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const refreshToken = async (): Promise<boolean> => {
+    try {
+      if (!token) {
+        return false;
+      }
+
+      const response = await axios.post('/auth/refresh');
+      const { token: newToken, user: userData } = response.data;
+      
+      // Update stored token
+      localStorage.setItem('token', newToken);
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      // Update state
+      setToken(newToken);
+      setUser(userData);
+      
+      // Update axios header
+      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+      
+      return true;
+    } catch (error: any) {
+      console.log('Token refresh failed, logging out');
+      logout();
+      return false;
+    }
+  };
+
   const value: AuthContextType = {
     user,
     token,
@@ -188,7 +248,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     loading,
-    updateProfile
+    updateProfile,
+    refreshToken
   };
 
   return (

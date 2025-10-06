@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { User, Mail, Phone, Calendar, Edit2, Save, X } from 'lucide-react';
-import LoadingSpinner from '../../LoadingSpinner';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Profile: React.FC = () => {
   const { user, updateProfile, loading } = useAuth();

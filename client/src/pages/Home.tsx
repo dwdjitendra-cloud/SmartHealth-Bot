@@ -1,42 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { 
-  Activity, 
-  Stethoscope, 
-  Shield, 
-  Clock, 
-  Users, 
   Award,
   ArrowRight,
-  CheckCircle
+  CheckCircle,
+  Linkedin,
+  X
 } from 'lucide-react';
 
 const Home: React.FC = () => {
   const { user } = useAuth();
-
-  const features = [
-    {
-      icon: Activity,
-      title: 'AI Symptom Analysis',
-      description: 'Get instant health insights using our advanced AI-powered symptom checker.'
-    },
-    {
-      icon: Stethoscope,
-      title: 'Expert Consultations',
-      description: 'Connect with certified healthcare professionals for personalized advice.'
-    },
-    {
-      icon: Shield,
-      title: 'Secure & Private',
-      description: 'Your health data is protected with enterprise-grade security measures.'
-    },
-    {
-      icon: Clock,
-      title: '24/7 Availability',
-      description: 'Access healthcare guidance anytime, anywhere with our round-the-clock service.'
-    }
-  ];
+  const [showDeveloperPopup, setShowDeveloperPopup] = useState(false);
 
   const stats = [
     { number: '10,000+', label: 'Happy Users' },
@@ -70,69 +45,29 @@ const Home: React.FC = () => {
             </p>
             
             {user ? (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  to="/symptom-checker"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors flex items-center justify-center"
-                >
-                  Check Symptoms
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-                <Link
-                  to="/dashboard"
-                  className="bg-white hover:bg-gray-50 text-blue-600 border-2 border-blue-600 px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
-                >
-                  Go to Dashboard
-                </Link>
+              <div className="flex justify-center">
+                <p className="text-lg text-gray-600 bg-green-50 border border-green-200 px-6 py-4 rounded-lg">
+                  Welcome back! Use the navigation menu to access your dashboard and health tools.
+                </p>
               </div>
             ) : (
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   to="/register"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors flex items-center justify-center"
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105 shadow-lg flex items-center justify-center cursor-pointer"
+                  style={{ pointerEvents: 'auto' }}
                 >
                   Get Started Free
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
                 <Link
                   to="/login"
-                  className="bg-white hover:bg-gray-50 text-blue-600 border-2 border-blue-600 px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+                  className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105 shadow-lg"
                 >
                   Sign In
                 </Link>
               </div>
             )}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose SmartHealthBot?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Experience the future of healthcare with our innovative features designed 
-              to make health management simple and accessible.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow">
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <feature.icon className="h-8 w-8 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600">
-                  {feature.description}
-                </p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -211,7 +146,8 @@ const Home: React.FC = () => {
           {!user && (
             <Link
               to="/register"
-              className="bg-white hover:bg-gray-100 text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-flex items-center"
+              className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105 shadow-lg inline-flex items-center cursor-pointer"
+              style={{ pointerEvents: 'auto' }}
             >
               Start Your Health Journey
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -219,6 +155,70 @@ const Home: React.FC = () => {
           )}
         </div>
       </section>
+
+      {/* Meet the Developer - Minimalist */}
+      <div className="text-center py-12 bg-gradient-to-br from-slate-50 to-blue-50 border-t border-gray-100">
+        <button
+          onClick={() => setShowDeveloperPopup(true)}
+          className="text-gray-700 hover:text-blue-700 font-semibold text-lg transition-all duration-300 tracking-wide group"
+        >
+          <span className="text-blue-600 font-mono">&lt;</span>
+          <span className="mx-2 group-hover:text-blue-600 transition-colors duration-300">Meet the Developer</span>
+          <span className="text-blue-600 font-mono">/&gt;</span>
+        </button>
+      </div>
+
+      {/* Developer Popup */}
+      {showDeveloperPopup && (
+        <>
+          {/* Overlay */}
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+            onClick={() => setShowDeveloperPopup(false)}
+          >
+            {/* Popup Content */}
+            <div 
+              className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full relative transform transition-all duration-300 scale-100 border border-gray-100"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowDeveloperPopup(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              {/* Content */}
+              <div className="text-center space-y-6">
+                {/* Developer Avatar */}
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg mx-auto">
+                  <span className="text-xl font-bold text-white">J</span>
+                </div>
+                
+                {/* Developer Name */}
+                <div>
+                  <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-1">
+                    Jitendra
+                  </h3>
+                  <p className="text-gray-600 text-sm font-medium">Full Stack Developer</p>
+                </div>
+                
+                {/* LinkedIn Button */}
+                <a
+                  href="https://www.linkedin.com/in/dwdjitendra/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+                >
+                  <Linkedin className="h-5 w-5" />
+                  <span>Connect on LinkedIn</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

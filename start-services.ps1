@@ -15,11 +15,11 @@ function Stop-ProcessOnPort {
         $fields = $_ -split '\s+'
         $fields[4]
     }
-    foreach ($pid in $processes) {
-        if ($pid -and $pid -ne "0") {
+    foreach ($processId in $processes) {
+        if ($processId -and $processId -ne "0") {
             try {
-                Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
-                Write-Host "Stopped process $pid on port $Port" -ForegroundColor Yellow
+                Stop-Process -Id $processId -Force -ErrorAction SilentlyContinue
+                Write-Host "Stopped process $processId on port $Port" -ForegroundColor Yellow
             } catch {
                 # Ignore errors
             }

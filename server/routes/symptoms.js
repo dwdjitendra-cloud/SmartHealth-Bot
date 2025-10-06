@@ -3,6 +3,7 @@ const axios = require('axios');
 const { body, validationResult } = require('express-validator');
 const SymptomQuery = require('../models/SymptomQuery');
 const auth = require('../middleware/auth');
+const fallbackSymptomAnalysis = require('../utils/fallbackSymptomAnalysis');
 
 const router = express.Router();
 
@@ -119,23 +120,11 @@ router.post('/analyze', auth, [
 
     const { symptoms } = req.body;
 
-    // Parse symptoms from text to array (split by common delimiters)
-    let symptomList;
-    if (Array.isArray(symptoms)) {
-      symptomList = symptoms;
-    } else {
-      // Convert text to array by splitting on common delimiters
-      symptomList = symptoms
-        .split(/[,;.\n]+/)
-        .map(s => s.trim().toLowerCase())
-        .filter(s => s.length > 0);
-    }
-
     // Call AI model service
     let aiResponse;
     try {
       const response = await axios.post(`${process.env.AI_MODEL_URL}/predict`, {
-        symptoms: symptomList
+        symptoms: symptoms  // Send original symptoms text/array directly
       }, {
         timeout: 30000, // 30 second timeout
         headers: {
@@ -144,22 +133,53 @@ router.post('/analyze', auth, [
       });
       
       aiResponse = response.data;
+      
+      // Validate AI response structure
+      if (!aiResponse.disease) {
+        throw new Error('Invalid AI response format');
+      }
+      
     } catch (aiError) {
       console.error('AI service error:', aiError.message);
       
-      // Fallback response if AI service is unavailable
+      // Check if it's a 400 error with helpful message
+      if (aiError.response?.status === 400 && aiError.response?.data) {
+        const errorData = aiError.response.data;
+        return res.status(400).json({
+          message: 'AI Analysis Error',
+          error: errorData.error || 'Invalid symptoms format',
+          suggestions: errorData.suggestions || errorData.tip,
+          receivedInput: errorData.received_input
+        });
+      }
+      
+      // Use fallback analysis when AI service is unavailable
+      console.log('Using fallback symptom analysis...');
+      const fallbackResult = fallbackSymptomAnalysis.analyzeSymptoms(symptoms);
+      
       aiResponse = {
-        disease: 'Service Unavailable',
-        description: 'AI analysis service is currently unavailable. Please try again later or consult a healthcare professional.',
-        precautions: ['Consult a healthcare professional', 'Monitor your symptoms', 'Rest and stay hydrated'],
-        home_remedies: ['Rest', 'Stay hydrated', 'Monitor symptoms'],
-        confidence: 0.0
+        disease: fallbackResult.disease,
+        description: fallbackResult.description,
+        precautions: fallbackResult.precautions,
+        home_remedies: fallbackResult.precautions, // Use precautions as home remedies
+        confidence: fallbackResult.confidence / 100, // Convert to decimal
+        severity: fallbackResult.severity.toLowerCase(),
+        emergency: fallbackResult.emergency,
+        fallback: true, // Indicate this is fallback analysis
+        disclaimer: fallbackResult.disclaimer
       };
     }
 
     // Determine severity based on symptoms and disease
-    const severity = determineSeverity(symptoms, aiResponse.disease);
-    const consultationRecommended = severity === 'high' || severity === 'critical';
+    let severity = aiResponse.severity || determineSeverity(symptoms, aiResponse.disease);
+    
+    // Ensure severity is a valid enum value
+    const validSeverities = ['low', 'medium', 'high', 'critical'];
+    if (!validSeverities.includes(severity)) {
+      severity = determineSeverity(symptoms, aiResponse.disease);
+    }
+    
+    const consultationRecommended = severity === 'high' || severity === 'critical' || aiResponse.confidence < 0.5;
 
     // Create symptom query record
     const symptomQuery = new SymptomQuery({
@@ -190,6 +210,9 @@ router.post('/analyze', auth, [
         confidence: aiResponse.confidence,
         severity,
         consultationRecommended,
+        matchedSymptoms: aiResponse.matched_symptoms || [],
+        totalSymptomsAnalyzed: aiResponse.total_symptoms_analyzed || 0,
+        predictionQuality: aiResponse.prediction_quality || 'unknown',
         timestamp: symptomQuery.createdAt
       }
     });
