@@ -109,20 +109,6 @@ const SymptomChecker: React.FC = () => {
       
     } catch (error: any) {
       console.error('Error analyzing symptoms:', error);
-<<<<<<< HEAD
-      // Show fallback demo analysis for better user experience
-      setAnalysis({
-        id: 'demo-fallback',
-        disease: 'Demo Analysis',
-        description: 'This is a demonstration of the AI analysis feature. In a live environment, you would receive a detailed medical analysis.',
-        precautions: ['Consult a healthcare professional', 'Monitor your symptoms', 'Rest and stay hydrated'],
-        homeRemedies: ['Rest', 'Stay hydrated', 'Maintain good hygiene'],
-        confidence: 0.85,
-        severity: 'medium',
-        consultationRecommended: false,
-        timestamp: new Date().toISOString()
-      });
-=======
       
       if (error.response?.status === 400) {
         const errorData = error.response.data;
@@ -134,7 +120,6 @@ const SymptomChecker: React.FC = () => {
       } else {
         toast.error('Failed to analyze symptoms. Please try again.');
       }
->>>>>>> 2e6afe8 (Update README with live deployment URL and enhance UI features)
     } finally {
       setLoading(false);
     }
