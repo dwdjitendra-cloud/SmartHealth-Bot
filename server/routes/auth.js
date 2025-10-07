@@ -295,4 +295,67 @@ router.post('/refresh', auth, async (req, res) => {
   }
 });
 
+/**
+ * @route   POST /api/auth/seed-users
+ * @desc    Seed test users for development/testing
+ * @access  Public
+ */
+router.post('/seed-users', async (req, res) => {
+  try {
+    const testUsers = [
+      {
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'test123',
+        phone: '9999999999',
+        age: 25,
+        gender: 'male',
+        isActive: true
+      },
+      {
+        name: 'Demo User',
+        email: 'demo@example.com', 
+        password: 'demo123',
+        phone: '8888888888',
+        age: 30,
+        gender: 'female',
+        isActive: true
+      }
+    ];
+
+    // Clear existing test users
+    await User.deleteMany({ 
+      email: { $in: ['test@example.com', 'demo@example.com'] } 
+    });
+
+    // Create test users
+    const createdUsers = [];
+    for (const userData of testUsers) {
+      const user = new User(userData);
+      await user.save();
+      createdUsers.push({
+        name: user.name,
+        email: user.email,
+        phone: user.phone
+      });
+    }
+
+    res.json({
+      message: 'Test users seeded successfully',
+      users: createdUsers,
+      loginCredentials: [
+        { email: 'test@example.com', password: 'test123' },
+        { email: 'demo@example.com', password: 'demo123' }
+      ]
+    });
+
+  } catch (error) {
+    console.error('Seed users error:', error);
+    res.status(500).json({
+      message: 'Error seeding users',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
 module.exports = router;

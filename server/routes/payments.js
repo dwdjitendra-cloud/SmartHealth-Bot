@@ -60,9 +60,12 @@ router.post('/create-order', auth, [
     .withMessage('Invalid consultation type')
 ], async (req, res) => {
   try {
+    console.log('💳 Payment order creation requested');
+    console.log('🔍 Razorpay instance available:', !!razorpay);
+    
     // Check if Razorpay is properly configured
     if (!razorpay) {
-      console.log('Razorpay not configured, providing fallback consultation booking...');
+      console.log('❌ Razorpay not configured, providing fallback consultation booking...');
       
       // Create a fallback "consultation booking" without payment
       const { 
@@ -180,6 +183,7 @@ router.post('/create-order', auth, [
     }
 
     // Create Razorpay order
+    console.log('🚀 Creating Razorpay order with options:', { amount: amount * 100, currency, doctorId });
     const options = {
       amount: amount * 100, // Razorpay expects amount in paise
       currency,
@@ -196,9 +200,12 @@ router.post('/create-order', auth, [
       if (!razorpay) {
         throw new Error('Razorpay service not initialized');
       }
+      console.log('📞 Calling razorpay.orders.create...');
       razorpayOrder = await razorpay.orders.create(options);
+      console.log('✅ Razorpay order created successfully:', razorpayOrder.id);
     } catch (razorpayError) {
-      console.error('Razorpay order creation failed:', razorpayError);
+      console.error('❌ Razorpay order creation failed:', razorpayError.message);
+      console.error('🔧 Full error:', razorpayError);
       
       // Provide enhanced fallback information
       return res.status(200).json({
