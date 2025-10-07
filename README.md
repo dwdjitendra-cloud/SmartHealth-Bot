@@ -4,12 +4,12 @@ A comprehensive full-stack healthcare application with AI-powered symptom analys
 
 ## 🌐 Live Demo
 
-**🚀 [View Live Application](https://smart-health-bot.vercel.app/)**
+**🚀 [View Live Application](https://smart-health-bot-ru2g.vercel.app/)**
 
 Experience the SmartHealthBot application live! The frontend is deployed and fully functional on Vercel.
 
-[![Deployment Status](https://img.shields.io/badge/Deployment-Live-brightgreen?style=for-the-badge&logo=vercel)](https://smart-health-bot.vercel.app/)
-[![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20TypeScript-blue?style=for-the-badge&logo=react)](https://smart-health-bot.vercel.app/)
+[![Deployment Status](https://img.shields.io/badge/Deployment-Live-brightgreen?style=for-the-badge&logo=vercel)](https://smart-health-bot-ru2g.vercel.app/)
+[![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20TypeScript-blue?style=for-the-badge&logo=react)](https://smart-health-bot-ru2g.vercel.app/)
 [![Platform](https://img.shields.io/badge/Platform-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/)
 
 ## 👨‍💻 Developer
@@ -22,7 +22,7 @@ Experience the SmartHealthBot application live! The frontend is deployed and ful
 ## 🚀 Quick Start
 
 ### 🌐 Try the Live Application
-**[🔗 SmartHealthBot Live Demo](https://smart-health-bot.vercel.app/)**
+**[🔗 SmartHealthBot Live Demo](https://smart-health-bot-ru2g.vercel.app/)**
 
 ### 💻 Local Development Setup
 
@@ -370,13 +370,59 @@ Authorization: Bearer <token>
 ## 🚀 Deployment
 
 ### ✅ Frontend Deployment (Vercel) - LIVE
-**🌐 Live URL**: [https://smart-health-bot.vercel.app/](https://smart-health-bot.vercel.app/)
+**🌐 Live URL**: [https://smart-health-bot-ru2g.vercel.app/](https://smart-health-bot-ru2g.vercel.app/)
 
 The frontend is successfully deployed on Vercel with:
 - ✅ Automatic deployments from GitHub
 - ✅ HTTPS enabled
 - ✅ Global CDN distribution
 - ✅ Optimized React build
+- ✅ Production environment variables configured
+
+### ✅ Backend Deployment (Render) - LIVE
+**🔧 Backend URL**: [https://smarthealth-bot-server.onrender.com](https://smarthealth-bot-server.onrender.com)
+
+The backend service is successfully deployed on Render with:
+- ✅ Node.js 22.16.0 with Express server
+- ✅ MongoDB Atlas connection configured
+- ✅ All API endpoints active
+- ✅ CORS configured for frontend integration
+
+### ✅ AI Model Deployment (Render) - LIVE
+**🤖 AI Model URL**: [https://smarthealth-bot-ai-model.onrender.com](https://smarthealth-bot-ai-model.onrender.com)
+
+The AI model service is successfully deployed on Render with:
+- ✅ Python 3.13.4 with compatible pandas/numpy
+- ✅ Flask API with CORS configured
+- ✅ Machine learning models loaded
+- ✅ Symptom analysis endpoints active
+
+### 🏗️ Production Architecture
+
+```
+Frontend (Vercel)     ←→     Backend (Render)     ←→     AI Model (Render)
+React + TypeScript             Node.js + Express           Python + Flask
+smart-health-bot-             smarthealth-bot-            smarthealth-bot-
+ru2g.vercel.app              server.onrender.com         ai-model.onrender.com
+        ↓                            ↓
+Environment Variables         MongoDB Atlas
+- VITE_API_URL               (Cloud Database)
+- VITE_AI_MODEL_URL          - Users
+- VITE_RAZORPAY_KEY_ID       - Doctors
+                             - Payments
+                             - Symptoms
+```
+
+### 🔗 Service Endpoints
+
+| Service | URL | Status |
+|---------|-----|--------|
+| **Frontend** | https://smart-health-bot-ru2g.vercel.app/ | 🟢 Live |
+| **Backend API** | https://smarthealth-bot-server.onrender.com/api | 🟢 Live |
+| **AI Model** | https://smarthealth-bot-ai-model.onrender.com | 🟢 Live |
+| **Database** | MongoDB Atlas | 🟢 Connected |
+
+### 🚀 Deployment Instructions
 
 **To deploy your own instance:**
 1. Build the frontend:
