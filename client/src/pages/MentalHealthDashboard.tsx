@@ -81,9 +81,9 @@ const MentalHealthDashboard: React.FC = () => {
   const loadDashboardData = async () => {
     try {
       const [moodRes, assessmentRes, mindfulnessRes] = await Promise.all([
-        axios.get('http://localhost:5001/api/mental-health/mood-entries'),
-        axios.get('http://localhost:5001/api/mental-health/assessments'),
-        axios.get('http://localhost:5001/api/mental-health/mindfulness-sessions')
+        axios.get('/mental-health/mood-entries'),
+        axios.get('/mental-health/assessments'),
+        axios.get('/mental-health/mindfulness-sessions')
       ]);
 
       // Handle response data safely
@@ -104,7 +104,7 @@ const MentalHealthDashboard: React.FC = () => {
 
   const submitMoodEntry = async () => {
     try {
-      await axios.post('http://localhost:5001/api/mental-health/mood-entry', {
+      await axios.post('/mental-health/mood-entry', {
         entryId: `mood-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         moodRating: currentMood,
         stressLevel: currentMood, // Use same value as fallback
@@ -145,7 +145,7 @@ const MentalHealthDashboard: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:5001/api/mental-health/assessment', {
+      await axios.post('/mental-health/assessment', {
         assessmentId: `assessment-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         type: selectedAssessment,
         score: score,
@@ -163,7 +163,7 @@ const MentalHealthDashboard: React.FC = () => {
 
   const startMindfulnessSession = async (type: string, duration: number) => {
     try {
-      await axios.post('http://localhost:5001/api/mental-health/mindfulness-session', {
+      await axios.post('/mental-health/mindfulness-session', {
         type,
         duration,
         durationCompleted: duration,
