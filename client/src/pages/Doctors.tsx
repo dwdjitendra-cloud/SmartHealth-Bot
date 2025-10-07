@@ -170,7 +170,15 @@ const Doctors: React.FC = () => {
     } catch (error: any) {
       console.error('Error creating payment order:', error);
       
-      // Handle payment service unavailable
+      // Handle improved fallback response (200 status with fallbackMode)
+      if (error.response?.data?.fallbackMode) {
+        const { note, booking } = error.response.data;
+        alert(`✅ Consultation Booked Successfully!\n\n${note}\n\nBooking Details:\n👨‍⚕️ Doctor: ${booking.doctorName}\n💰 Fee: ${booking.currency} ${booking.amount}\n📞 Type: ${booking.consultationType}\n📅 Scheduled: ${booking.scheduledFor}`);
+        setPaymentLoading(null);
+        return;
+      }
+      
+      // Handle payment service unavailable (503 status)
       if (error.response?.status === 503) {
         const fallbackData = error.response?.data?.fallback;
         if (fallbackData?.canProceed) {
