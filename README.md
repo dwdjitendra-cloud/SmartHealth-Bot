@@ -4,17 +4,17 @@ A comprehensive full-stack healthcare application with AI-powered symptom analys
 
 ## 🌐 Live Demo
 
-**🚀 [View Live Application](https://smart-health-bot-jitendras-projects-f404fe12.vercel.app/)**
+**🚀 [View Live Application](https://smart-health-bot.vercel.app/)**
 
 Experience the SmartHealthBot application live! The frontend is deployed and fully functional on Vercel.
 
-[![Deployment Status](https://img.shields.io/badge/Deployment-Live-brightgreen?style=for-the-badge&logo=vercel)](https://smart-health-bot-jitendras-projects-f404fe12.vercel.app/)
-[![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20TypeScript-blue?style=for-the-badge&logo=react)](https://smart-health-bot-jitendras-projects-f404fe12.vercel.app/)
+[![Deployment Status](https://img.shields.io/badge/Deployment-Live-brightgreen?style=for-the-badge&logo=vercel)](https://smart-health-bot.vercel.app/)
+[![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20TypeScript-blue?style=for-the-badge&logo=react)](https://smart-health-bot.vercel.app/)
 [![Platform](https://img.shields.io/badge/Platform-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/)
 
 ## 👨‍💻 Developer
 
-**Jitendra Kumar **  
+**Jitendra Kumar Dodwadiya**  
 📧 Email: [jitendrakumar637587@gmail.com](mailto:jitendrakumar637587@gmail.com)  
 💼 LinkedIn: [dwdjitendra](https://www.linkedin.com/in/dwdjitendra/)  
 🚀 Full-Stack Developer specializing in MERN Stack & AI/ML Integration
@@ -22,7 +22,7 @@ Experience the SmartHealthBot application live! The frontend is deployed and ful
 ## 🚀 Quick Start
 
 ### 🌐 Try the Live Application
-**[🔗 SmartHealthBot Live Demo](https://smart-health-bot-jitendras-projects-f404fe12.vercel.app/)**
+**[🔗 SmartHealthBot Live Demo](https://smart-health-bot.vercel.app/)**
 
 ### 💻 Local Development Setup
 

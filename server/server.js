@@ -37,7 +37,12 @@ app.use('/api/', apiLimiter);
 
 // CORS configuration
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'],
+  origin: [
+    'http://localhost:5173', 
+    'http://localhost:5174', 
+    'http://localhost:3000',
+    'https://smart-health-bot.vercel.app'
+  ],
   credentials: true
 }));
 
