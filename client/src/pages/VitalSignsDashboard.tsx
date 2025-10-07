@@ -106,7 +106,30 @@ const VitalSignsDashboard: React.FC = () => {
         return;
       }
 
-      const response = await axios.post('/vital-signs/manual', manualEntry);
+      // Prepare the data, sending only non-empty values
+      const readingData: any = {
+        heart_rate: manualEntry.heart_rate,
+        blood_pressure_systolic: manualEntry.blood_pressure_systolic,
+        blood_pressure_diastolic: manualEntry.blood_pressure_diastolic,
+      };
+
+      // Add optional fields only if they have values
+      if (manualEntry.temperature && manualEntry.temperature.trim() !== '') {
+        readingData.temperature = manualEntry.temperature;
+      }
+      if (manualEntry.oxygen_saturation && manualEntry.oxygen_saturation.trim() !== '') {
+        readingData.oxygen_saturation = manualEntry.oxygen_saturation;
+      }
+      if (manualEntry.stress_level && manualEntry.stress_level.trim() !== '') {
+        readingData.stress_level = manualEntry.stress_level;
+      }
+      if (manualEntry.steps && manualEntry.steps.trim() !== '') {
+        readingData.steps = manualEntry.steps;
+      }
+
+      console.log('Sending vital signs data:', readingData);
+
+      const response = await axios.post('/vital-signs/manual', readingData);
 
       if (response.status === 200) {
         const data = response.data;
@@ -122,10 +145,13 @@ const VitalSignsDashboard: React.FC = () => {
             steps: ''
           });
           setShowManualEntry(false);
+          alert('Vital signs reading added successfully!');
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding manual reading:', error);
+      console.error('Error details:', error.response?.data);
+      alert(`Failed to add reading: ${error.response?.data?.message || error.message}`);
     }
   };
 

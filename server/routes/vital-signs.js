@@ -218,18 +218,18 @@ router.post('/manual', auth, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Create new vital signs reading
+        // Create new vital signs reading with better validation
         const newReading = {
             timestamp: new Date(),
-            heart_rate: parseInt(heart_rate),
-            blood_pressure_systolic: parseInt(blood_pressure_systolic),
-            blood_pressure_diastolic: parseInt(blood_pressure_diastolic),
-            temperature: temperature ? parseFloat(temperature) : null,
-            oxygen_saturation: oxygen_saturation ? parseInt(oxygen_saturation) : null,
-            steps: steps ? parseInt(steps) : 0,
+            heart_rate: parseInt(heart_rate) || 0,
+            blood_pressure_systolic: parseInt(blood_pressure_systolic) || 0,
+            blood_pressure_diastolic: parseInt(blood_pressure_diastolic) || 0,
+            temperature: temperature && temperature !== '' ? parseFloat(temperature) : null,
+            oxygen_saturation: oxygen_saturation && oxygen_saturation !== '' ? parseInt(oxygen_saturation) : null,
+            steps: steps && steps !== '' ? parseInt(steps) : 0,
             calories_burned: 0, // Can be calculated based on other metrics
-            sleep_hours: sleep_hours ? parseFloat(sleep_hours) : 0,
-            stress_level: stress_level ? parseInt(stress_level) : null
+            sleep_hours: sleep_hours && sleep_hours !== '' ? parseFloat(sleep_hours) : 0,
+            stress_level: stress_level && stress_level !== '' ? parseInt(stress_level) : null
         };
 
         // Initialize vital signs history if not exists
@@ -258,6 +258,9 @@ router.post('/manual', auth, async (req, res) => {
 
     } catch (error) {
         console.error('Error adding manual vital signs:', error);
+        console.error('Request body:', req.body);
+        console.error('User ID:', req.user?._id);
+        console.error('Stack trace:', error.stack);
         res.status(500).json({ 
             message: 'Error adding vital signs reading',
             error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
