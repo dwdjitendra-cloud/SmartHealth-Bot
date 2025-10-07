@@ -74,7 +74,7 @@ const Home: React.FC = () => {
       rating: 5
     },
     {
-      name: 'Dr. Rajesh Sharma',
+      name: 'Dr. Ganesh Singh',
       role: 'Cardiologist',
       content: 'The AI-powered platform makes remote consultations more efficient and accurate than ever before.',
       rating: 5
