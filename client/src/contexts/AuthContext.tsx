@@ -119,7 +119,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
       setLoading(true);
-      const response = await axios.post('/auth/login', { email, password });
+      
+      // Debug logging
+      console.log('Login attempt:', { email, hasPassword: !!password });
+      console.log('API Base URL:', axios.defaults.baseURL);
+      
+      const response = await axios.post('/auth/login', { 
+        email: email.trim(), 
+        password 
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
       
       const { token: newToken, user: userData } = response.data;
       
@@ -137,7 +149,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       toast.success('Login successful!');
       return true;
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Login failed';
+      // Enhanced error logging
+      console.error('Login error:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: error.config?.url,
+        baseURL: error.config?.baseURL
+      });
+      
+      const message = error.response?.data?.message || 
+                     error.response?.data?.errors?.[0]?.msg || 
+                     'Login failed';
       toast.error(message);
       return false;
     } finally {

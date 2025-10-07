@@ -1,26 +1,40 @@
-{
-  "version": 2,
+{{{
+
   "builds": [
-    {
+
+    {  "builds": [  "rewrites": [
+
       "src": "client/package.json",
-      "use": "@vercel/static-build",
+
+      "use": "@vercel/static-build",    {    {
+
       "config": {
-        "distDir": "dist"
+
+        "distDir": "dist"      "src": "client/package.json",      "source": "/(.*)",
+
       }
-    }
+
+    }      "use": "@vercel/static-build",      "destination": "/index.html"
+
   ],
+
+  "routes": [      "config": {    }
+
+    {
+
+      "src": "/(.*)",        "distDir": "dist"  ]
+
+      "dest": "/client/$1"
+
+    }      }}
+
+  ]    }
+
+}  ],
   "routes": [
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/favicon.ico"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/client/$1"
     }
   ]
 }
