@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import { 
   Send, 
   Activity, 
@@ -7,9 +8,10 @@ import {
   Info, 
   CheckCircle,
   Clock,
-  Stethoscope
+  Stethoscope,
+  Brain,
+  Target
 } from 'lucide-react';
-import LoadingSpinner from '../components/LoadingSpinner';
 
 interface SymptomAnalysis {
   id: string;
@@ -20,6 +22,9 @@ interface SymptomAnalysis {
   confidence: number;
   severity: string;
   consultationRecommended: boolean;
+  matchedSymptoms?: string[];
+  totalSymptomsAnalyzed?: number;
+  predictionQuality?: string;
   timestamp: string;
 }
 
@@ -36,18 +41,31 @@ const SymptomChecker: React.FC = () => {
 
   const fetchHistory = async () => {
     try {
-      const response = await axios.get('/symptoms/history?limit=5');
-      setHistory(response.data.data.queries.map((query: any) => ({
-        id: query._id,
-        disease: query.prediction.disease,
-        description: query.prediction.description,
-        precautions: query.prediction.precautions,
-        homeRemedies: query.prediction.homeRemedies,
-        confidence: query.prediction.confidence,
-        severity: query.prediction.severity,
-        consultationRecommended: query.consultationRecommended,
-        timestamp: query.createdAt
-      })));
+      // In demo mode, skip history fetch and provide sample data
+      setHistory([
+        {
+          id: 'demo-1',
+          disease: 'Common Cold',
+          description: 'A viral infection of the upper respiratory tract.',
+          precautions: ['Rest', 'Drink fluids', 'Avoid contact'],
+          homeRemedies: ['Warm liquids', 'Honey', 'Steam inhalation'],
+          confidence: 0.9,
+          severity: 'low',
+          consultationRecommended: false,
+          timestamp: new Date(Date.now() - 86400000).toISOString()
+        },
+        {
+          id: 'demo-2',
+          disease: 'Gastroenteritis',
+          description: 'Inflammation of the stomach and intestines.',
+          precautions: ['Stay hydrated', 'Bland diet', 'Rest'],
+          homeRemedies: ['BRAT diet', 'Electrolyte solutions', 'Rest'],
+          confidence: 0.75,
+          severity: 'medium',
+          consultationRecommended: true,
+          timestamp: new Date(Date.now() - 172800000).toISOString()
+        }
+      ]);
     } catch (error) {
       console.error('Error fetching history:', error);
     }
@@ -58,22 +76,50 @@ const SymptomChecker: React.FC = () => {
     
     if (!symptoms.trim()) return;
 
+    if (symptoms.trim().length < 10) {
+      toast.error('Please provide more detailed symptoms (at least 10 characters)');
+      return;
+    }
+
     setLoading(true);
     setAnalysis(null);
 
     try {
-      const response = await axios.post('/symptoms/analyze', {
+      // Use test endpoint for demo (bypasses authentication)
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await axios.post(`${apiUrl}/symptoms/test`, {
         symptoms: symptoms.trim()
       });
 
-      setAnalysis(response.data.analysis);
+      // Transform response to match expected format
+      const analysisData = response.data.analysis;
+      setAnalysis({
+        id: 'demo-' + Date.now(),
+        disease: analysisData.disease,
+        description: analysisData.description,
+        precautions: analysisData.precautions,
+        homeRemedies: analysisData.homeRemedies,
+        confidence: analysisData.confidence,
+        severity: analysisData.severity,
+        consultationRecommended: analysisData.consultationRecommended,
+        timestamp: analysisData.timestamp
+      });
       setSymptoms('');
+      toast.success('Symptoms analyzed successfully!');
       
-      // Refresh history
-      fetchHistory();
     } catch (error: any) {
       console.error('Error analyzing symptoms:', error);
-      // Handle error - could show toast or error message
+      
+      if (error.response?.status === 400) {
+        const errorData = error.response.data;
+        toast.error(errorData.message || 'Invalid symptom input');
+        
+        if (errorData.suggestions) {
+          toast.error(errorData.suggestions, { duration: 6000 });
+        }
+      } else {
+        toast.error('Failed to analyze symptoms. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -101,6 +147,24 @@ const SymptomChecker: React.FC = () => {
       case 'medium': return 'bg-yellow-50 border-yellow-200 text-yellow-800';
       case 'low': return 'bg-green-50 border-green-200 text-green-800';
       default: return 'bg-gray-50 border-gray-200 text-gray-800';
+    }
+  };
+
+  const getQualityIcon = (quality: string | undefined) => {
+    switch (quality) {
+      case 'high': return <Target className="h-4 w-4 text-green-600" />;
+      case 'medium': return <Brain className="h-4 w-4 text-yellow-600" />;
+      case 'low': return <Info className="h-4 w-4 text-orange-600" />;
+      default: return <Info className="h-4 w-4 text-gray-600" />;
+    }
+  };
+
+  const getQualityColor = (quality: string | undefined) => {
+    switch (quality) {
+      case 'high': return 'text-green-600 bg-green-50';
+      case 'medium': return 'text-yellow-600 bg-yellow-50';
+      case 'low': return 'text-orange-600 bg-orange-50';
+      default: return 'text-gray-600 bg-gray-50';
     }
   };
 
@@ -132,6 +196,17 @@ const SymptomChecker: React.FC = () => {
           </p>
         </div>
 
+        {/* Demo Mode Banner */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center">
+            <Info className="h-5 w-5 text-blue-600 mr-2" />
+            <div className="text-sm text-blue-800">
+              <strong>Demo Mode:</strong> You're testing the AI symptom analysis without authentication. 
+              Try symptoms like "fever, headache, cough" or "stomach pain, nausea, vomiting" to see the AI in action!
+            </div>
+          </div>
+        </div>
+
         {/* Symptom Input Form */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
           <form onSubmit={handleSubmit}>
@@ -143,16 +218,46 @@ const SymptomChecker: React.FC = () => {
                 id="symptoms"
                 value={symptoms}
                 onChange={(e) => setSymptoms(e.target.value)}
-                placeholder="Please describe your symptoms in detail. For example: 'I have been experiencing headaches, fever, and body aches for the past 2 days. The headache is severe and I feel very tired.'"
+                placeholder="Describe your symptoms naturally. Examples:
+• 'I have a severe headache, fever, and feel very tired'
+• 'Experiencing chest pain and difficulty breathing'
+• 'Stomach pain, nausea, and loss of appetite for 2 days'
+• 'Joint pain, muscle aches, and feeling weak'
+
+Be as specific as possible about the intensity, duration, and location of symptoms."
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                rows={4}
+                rows={6}
                 disabled={loading}
               />
+              <div className="mt-2 flex justify-between items-center">
+                <span className="text-xs text-gray-500">
+                  Minimum 10 characters required
+                </span>
+                <span className={`text-xs ${symptoms.length >= 10 ? 'text-green-600' : 'text-gray-400'}`}>
+                  {symptoms.length}/1000
+                </span>
+              </div>
+            </div>
+            
+            {/* Helpful Tips */}
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+              <div className="flex items-start">
+                <Info className="h-4 w-4 text-yellow-600 mt-0.5 mr-2 flex-shrink-0" />
+                <div className="text-sm text-yellow-800">
+                  <p className="font-medium mb-1">Tips for better analysis:</p>
+                  <ul className="text-xs space-y-1">
+                    <li>• Use simple, clear language (e.g., "headache" not "cephalgia")</li>
+                    <li>• Include severity (mild, moderate, severe)</li>
+                    <li>• Mention duration (how long you've had symptoms)</li>
+                    <li>• Describe location (where you feel the pain/discomfort)</li>
+                  </ul>
+                </div>
+              </div>
             </div>
             
             <button
               type="submit"
-              disabled={loading || !symptoms.trim()}
+              disabled={loading || symptoms.trim().length < 10}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
             >
               {loading ? (
@@ -193,9 +298,17 @@ const SymptomChecker: React.FC = () => {
               </div>
               
               <div className="bg-blue-50 p-4 rounded-lg mb-4">
-                <div className="flex items-center mb-2">
-                  <Info className="h-5 w-5 text-blue-600 mr-2" />
-                  <span className="font-medium text-blue-900">Confidence Score</span>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center">
+                    <Info className="h-5 w-5 text-blue-600 mr-2" />
+                    <span className="font-medium text-blue-900">Confidence Score</span>
+                  </div>
+                  {analysis.predictionQuality && (
+                    <div className={`flex items-center px-2 py-1 rounded text-xs ${getQualityColor(analysis.predictionQuality)}`}>
+                      {getQualityIcon(analysis.predictionQuality)}
+                      <span className="ml-1 capitalize">{analysis.predictionQuality} Quality</span>
+                    </div>
+                  )}
                 </div>
                 <div className="w-full bg-blue-200 rounded-full h-2 mb-2">
                   <div 
@@ -203,10 +316,39 @@ const SymptomChecker: React.FC = () => {
                     style={{ width: `${analysis.confidence * 100}%` }}
                   ></div>
                 </div>
-                <span className="text-sm text-blue-700">
-                  {Math.round(analysis.confidence * 100)}% confidence
-                </span>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-blue-700">
+                    {Math.round(analysis.confidence * 100)}% confidence
+                  </span>
+                  {analysis.totalSymptomsAnalyzed && (
+                    <span className="text-xs text-blue-600">
+                      {analysis.totalSymptomsAnalyzed} symptoms analyzed
+                    </span>
+                  )}
+                </div>
               </div>
+
+              {/* Matched Symptoms */}
+              {analysis.matchedSymptoms && analysis.matchedSymptoms.length > 0 && (
+                <div className="bg-green-50 p-4 rounded-lg mb-4">
+                  <div className="flex items-center mb-2">
+                    <Target className="h-4 w-4 text-green-600 mr-2" />
+                    <span className="text-sm font-medium text-green-900">
+                      Recognized Symptoms ({analysis.matchedSymptoms.length})
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {analysis.matchedSymptoms.map((symptom, index) => (
+                      <span
+                        key={index}
+                        className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded"
+                      >
+                        {symptom.replace(/_/g, ' ')}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <p className="text-gray-700 leading-relaxed">
                 {analysis.description}

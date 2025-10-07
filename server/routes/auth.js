@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
+const { authLimiter, passwordResetLimiter, logSecurityEvent } = require('../middleware/security');
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ const router = express.Router();
  * @desc    Register a new user
  * @access  Public
  */
-router.post('/register', [
+router.post('/register', authLimiter, [
   body('name')
     .trim()
     .isLength({ min: 2, max: 50 })
@@ -101,7 +102,7 @@ router.post('/register', [
  * @desc    Authenticate user and get token
  * @access  Public
  */
-router.post('/login', [
+router.post('/login', authLimiter, [
   body('email')
     .isEmail()
     .normalizeEmail()
@@ -248,6 +249,48 @@ router.put('/profile', auth, [
     console.error('Profile update error:', error);
     res.status(500).json({
       message: 'Server error updating profile'
+    });
+  }
+});
+
+/**
+ * @route   POST /api/auth/refresh
+ * @desc    Refresh JWT token
+ * @access  Private
+ */
+router.post('/refresh', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({
+        message: 'User not found'
+      });
+    }
+
+    // Create new token
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        age: user.age,
+        gender: user.gender
+      }
+    });
+
+  } catch (error) {
+    console.error('Token refresh error:', error);
+    res.status(500).json({
+      message: 'Server error refreshing token'
     });
   }
 });

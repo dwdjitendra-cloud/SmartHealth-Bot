@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const { apiLimiter, sanitizeInput, securityHeaders, validateRequestSize } = require('./middleware/security');
 require('dotenv').config();
 
 // Validate required environment variables
@@ -17,23 +18,26 @@ const symptomRoutes = require('./routes/symptoms');
 const paymentRoutes = require('./routes/payments');
 const doctorRoutes = require('./routes/doctors');
 const dashboardRoutes = require('./routes/dashboard');
+const healthRiskRoutes = require('./routes/health-risk');
+const vitalSignsRoutes = require('./routes/vital-signs');
+const medicationRoutes = require('./routes/medications');
+const telemedicineRoutes = require('./routes/telemedicine');
+const mentalHealthRoutes = require('./routes/mental-health');
 
 const app = express();
 
 // Security middleware
 app.use(helmet());
+app.use(securityHeaders);
+app.use(validateRequestSize);
+app.use(sanitizeInput);
 
 // Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
-});
-app.use('/api/', limiter);
+app.use('/api/', apiLimiter);
 
 // CORS configuration
 app.use(cors({
-  origin:  'http://localhost:5173',
+  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'],
   credentials: true
 }));
 
@@ -52,6 +56,11 @@ app.use('/api/symptoms', symptomRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/health-risk', healthRiskRoutes);
+app.use('/api/vital-signs', vitalSignsRoutes);
+app.use('/api/medications', medicationRoutes);
+app.use('/api/telemedicine', telemedicineRoutes);
+app.use('/api/mental-health', mentalHealthRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -76,7 +85,7 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);

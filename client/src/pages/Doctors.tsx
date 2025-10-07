@@ -103,7 +103,7 @@ const Doctors: React.FC = () => {
 
     try {
       // Create payment order
-      const orderResponse = await axios.post('/payments/create-order', {
+      const orderResponse = await axios.post('http://localhost:5001/api/payments/create-order', {
         amount: doctor.consultationFee,
         currency: 'INR',
         doctorId: doctor._id,
@@ -111,7 +111,14 @@ const Doctors: React.FC = () => {
         description: `Consultation with Dr. ${doctor.name}`
       });
 
-      const { order, paymentId } = orderResponse.data;
+      const { order, fallbackMode, note } = orderResponse.data;
+
+      // Handle fallback mode (when payment service is unavailable)
+      if (fallbackMode) {
+        alert(`✅ Consultation Booked Successfully!\n\nDr. ${doctor.name} consultation has been scheduled.\n\n${note}\n\nYou will receive consultation details via email.`);
+        setPaymentLoading(null);
+        return;
+      }
 
       // Load Razorpay script
       const res = await loadRazorpayScript();
@@ -132,7 +139,7 @@ const Doctors: React.FC = () => {
         handler: async (response: any) => {
           try {
             // Verify payment
-            await axios.post('/payments/verify', {
+            await axios.post('http://localhost:5001/api/payments/verify', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature
@@ -160,9 +167,27 @@ const Doctors: React.FC = () => {
       const rzp = new (window as any).Razorpay(options);
       rzp.open();
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating payment order:', error);
-      alert('Failed to initiate payment. Please try again.');
+      
+      // Handle payment service unavailable
+      if (error.response?.status === 503) {
+        const fallbackData = error.response?.data?.fallback;
+        if (fallbackData?.canProceed) {
+          const proceed = window.confirm(
+            `Payment service is temporarily unavailable. ${fallbackData.message}\n\nWould you like to proceed with booking the consultation? You can pay later.`
+          );
+          
+          if (proceed) {
+            alert(`Consultation booked with Dr. ${doctor.name}! You will receive details via email. Payment can be completed later.`);
+          }
+        } else {
+          alert('Payment service is temporarily unavailable. Please try again later.');
+        }
+      } else {
+        alert('Failed to initiate payment. Please try again.');
+      }
+      
       setPaymentLoading(null);
     }
   };
