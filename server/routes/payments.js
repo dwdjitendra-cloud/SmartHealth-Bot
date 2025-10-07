@@ -12,6 +12,10 @@ const router = express.Router();
 // Initialize Razorpay with error handling
 let razorpay = null;
 try {
+  console.log('🔍 Checking Razorpay environment variables...');
+  console.log('RAZORPAY_KEY_ID:', process.env.RAZORPAY_KEY_ID ? '✅ Present' : '❌ Missing');
+  console.log('RAZORPAY_KEY_SECRET:', process.env.RAZORPAY_KEY_SECRET ? '✅ Present' : '❌ Missing');
+  
   if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET && 
       process.env.RAZORPAY_KEY_ID !== 'your_razorpay_key_id' &&
       process.env.RAZORPAY_KEY_SECRET !== 'your_razorpay_key_secret') {
@@ -20,8 +24,11 @@ try {
       key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
     console.log('✅ Razorpay payment service initialized successfully');
+    console.log('🔑 Using Key ID:', process.env.RAZORPAY_KEY_ID);
   } else {
     console.log('⚠️ Razorpay credentials not configured - using fallback payment system');
+    console.log('Key ID value:', process.env.RAZORPAY_KEY_ID);
+    console.log('Secret present:', !!process.env.RAZORPAY_KEY_SECRET);
   }
 } catch (error) {
   console.warn('Razorpay initialization failed:', error.message);

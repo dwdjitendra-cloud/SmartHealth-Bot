@@ -103,6 +103,9 @@ const Doctors: React.FC = () => {
 
     try {
       // Create payment order
+      console.log('🚀 Creating payment order for Dr.', doctor.name);
+      console.log('💰 Amount:', doctor.consultationFee);
+      
       const orderResponse = await axios.post('/payments/create-order', {
         amount: doctor.consultationFee,
         currency: 'INR',
@@ -111,22 +114,30 @@ const Doctors: React.FC = () => {
         description: `Consultation with Dr. ${doctor.name}`
       });
 
+      console.log('📦 Order response:', orderResponse.data);
       const { order, fallbackMode, note } = orderResponse.data;
 
       // Handle fallback mode (when payment service is unavailable)
       if (fallbackMode) {
+        console.log('⚠️ Using fallback mode:', note);
         alert(`✅ Consultation Booked Successfully!\n\nDr. ${doctor.name} consultation has been scheduled.\n\n${note}\n\nYou will receive consultation details via email.`);
         setPaymentLoading(null);
         return;
       }
 
+      console.log('🎯 Razorpay payment flow enabled');
+      console.log('🔑 Razorpay Key ID:', import.meta.env.VITE_RAZORPAY_KEY_ID);
+
       // Load Razorpay script
+      console.log('📜 Loading Razorpay script...');
       const res = await loadRazorpayScript();
       if (!res) {
+        console.error('❌ Failed to load Razorpay script');
         alert('Failed to load Razorpay. Please try again.');
         setPaymentLoading(null);
         return;
       }
+      console.log('✅ Razorpay script loaded successfully');
 
       // Initialize Razorpay
       const options = {
@@ -137,17 +148,20 @@ const Doctors: React.FC = () => {
         description: `Consultation with Dr. ${doctor.name}`,
         order_id: order.id,
         handler: async (response: any) => {
+          console.log('✅ Payment successful:', response);
           try {
             // Verify payment
+            console.log('🔍 Verifying payment...');
             await axios.post('/payments/verify', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature
             });
 
+            console.log('✅ Payment verified successfully');
             alert(`Payment successful! You can now connect with Dr. ${doctor.name}. Check your email for consultation details.`);
           } catch (error) {
-            console.error('Payment verification failed:', error);
+            console.error('❌ Payment verification failed:', error);
             alert('Payment verification failed. Please contact support.');
           } finally {
             setPaymentLoading(null);
@@ -160,9 +174,16 @@ const Doctors: React.FC = () => {
         },
         theme: {
           color: '#2563eb'
+        },
+        modal: {
+          ondismiss: () => {
+            console.log('💔 Payment modal dismissed by user');
+            setPaymentLoading(null);
+          }
         }
       };
 
+      console.log('🚀 Opening Razorpay with options:', options);
       // Open Razorpay payment window
       const rzp = new (window as any).Razorpay(options);
       rzp.open();
