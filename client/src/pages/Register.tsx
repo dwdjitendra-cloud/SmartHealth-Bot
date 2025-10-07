@@ -13,7 +13,10 @@ const Register: React.FC = () => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    phone: '',
+    age: '',
+    gender: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -24,7 +27,10 @@ const Register: React.FC = () => {
     name: { required: true, minLength: 2, maxLength: 50 },
     email: { required: true, email: true },
     password: { required: true, password: true },
-    confirmPassword: { required: true }
+    confirmPassword: { required: true },
+    phone: { required: true, phone: true },
+    age: { required: true, age: true },
+    gender: { required: true }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,9 +62,9 @@ const Register: React.FC = () => {
       name: formData.name.trim(),
       email: formData.email,
       password: formData.password,
-      phone: '',
-      age: 0,
-      gender: 'other'
+      phone: formData.phone,
+      age: parseInt(formData.age),
+      gender: formData.gender
     });
 
     if (success) {
@@ -289,6 +295,87 @@ const Register: React.FC = () => {
                     <p className="mt-2 text-sm text-red-600 flex items-center">
                       <span className="w-1 h-1 bg-red-600 rounded-full mr-2"></span>
                       {errors.confirmPassword}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Phone Number
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      autoComplete="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className={`block w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                        errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                      placeholder="Enter 10-digit phone number"
+                    />
+                  </div>
+                  {errors.phone && (
+                    <p className="mt-2 text-sm text-red-600 flex items-center">
+                      <span className="w-1 h-1 bg-red-600 rounded-full mr-2"></span>
+                      {errors.phone}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label htmlFor="age" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Age
+                  </label>
+                  <div className="relative">
+                    <input
+                      id="age"
+                      name="age"
+                      type="number"
+                      min="1"
+                      max="120"
+                      value={formData.age}
+                      onChange={handleChange}
+                      className={`block w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                        errors.age ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                      placeholder="Enter your age"
+                    />
+                  </div>
+                  {errors.age && (
+                    <p className="mt-2 text-sm text-red-600 flex items-center">
+                      <span className="w-1 h-1 bg-red-600 rounded-full mr-2"></span>
+                      {errors.age}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label htmlFor="gender" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Gender
+                  </label>
+                  <div className="relative">
+                    <select
+                      id="gender"
+                      name="gender"
+                      value={formData.gender}
+                      onChange={(e) => setFormData(prev => ({ ...prev, gender: e.target.value }))}
+                      className={`block w-full px-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
+                        errors.gender ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                    >
+                      <option value="">Select your gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  {errors.gender && (
+                    <p className="mt-2 text-sm text-red-600 flex items-center">
+                      <span className="w-1 h-1 bg-red-600 rounded-full mr-2"></span>
+                      {errors.gender}
                     </p>
                   )}
                 </div>

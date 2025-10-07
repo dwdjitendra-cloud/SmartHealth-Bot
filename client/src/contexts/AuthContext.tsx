@@ -211,6 +211,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         data: error.response?.data
       });
       
+      // Log the detailed error message
+      console.error('Detailed registration error:', JSON.stringify(error.response?.data, null, 2));
+      
       let message = 'Registration failed';
       
       if (error.response?.status === 429) {
