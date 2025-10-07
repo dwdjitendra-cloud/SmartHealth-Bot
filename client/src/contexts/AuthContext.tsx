@@ -162,9 +162,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Log the detailed error message
       console.error('Detailed error data:', JSON.stringify(error.response?.data, null, 2));
       
-      const message = error.response?.data?.message || 
-                     error.response?.data?.errors?.[0]?.msg || 
-                     'Login failed';
+      let message = 'Login failed';
+      
+      if (error.response?.status === 429) {
+        const retryAfter = error.response?.data?.retryAfter || 900; // Default 15 minutes
+        const minutes = Math.ceil(retryAfter / 60);
+        message = `Too many login attempts. Please try again in ${minutes} minutes.`;
+      } else if (error.response?.status === 400) {
+        message = error.response?.data?.message || 
+                 error.response?.data?.errors?.[0]?.msg || 
+                 'Invalid credentials';
+      } else {
+        message = error.response?.data?.message || 'Login failed';
+      }
+      
       toast.error(message);
       return false;
     } finally {
@@ -193,7 +204,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       toast.success('Registration successful!');
       return true;
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Registration failed';
+      // Enhanced error handling for registration
+      console.error('Registration error:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data
+      });
+      
+      let message = 'Registration failed';
+      
+      if (error.response?.status === 429) {
+        const retryAfter = error.response?.data?.retryAfter || 900; // Default 15 minutes
+        const minutes = Math.ceil(retryAfter / 60);
+        message = `Too many registration attempts. Please try again in ${minutes} minutes.`;
+      } else if (error.response?.status === 400) {
+        message = error.response?.data?.message || 
+                 error.response?.data?.errors?.[0]?.msg || 
+                 'Invalid registration data';
+      } else {
+        message = error.response?.data?.message || 'Registration failed';
+      }
+      
       toast.error(message);
       return false;
     } finally {
