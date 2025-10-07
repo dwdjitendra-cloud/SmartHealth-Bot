@@ -123,6 +123,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Debug logging
       console.log('Login attempt:', { email, hasPassword: !!password });
       console.log('API Base URL:', axios.defaults.baseURL);
+      console.log('Request payload:', { email: email.trim(), password: password.substring(0, 2) + '***' });
       
       const response = await axios.post('/auth/login', { 
         email: email.trim(), 
@@ -157,6 +158,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         url: error.config?.url,
         baseURL: error.config?.baseURL
       });
+      
+      // Log the detailed error message
+      console.error('Detailed error data:', JSON.stringify(error.response?.data, null, 2));
       
       const message = error.response?.data?.message || 
                      error.response?.data?.errors?.[0]?.msg || 
