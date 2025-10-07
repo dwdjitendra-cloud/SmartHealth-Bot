@@ -101,11 +101,11 @@
   
   /* Navigation Styles */
   .nav-link {
-    @apply relative px-4 py-2 text-healthcare-neutral-600 font-medium rounded-lg transition-all duration-200 hover:text-healthcare-primary-600 hover:bg-healthcare-primary-50 focus:text-healthcare-primary-600 focus:bg-healthcare-primary-50;
+    @apply relative px-4 py-2 text-white/80 font-medium rounded-lg transition-all duration-200 hover:text-white hover:bg-white/10 focus:text-white focus:bg-white/10;
   }
   
   .nav-link-active {
-    @apply text-healthcare-primary-600 bg-healthcare-primary-50;
+    @apply text-white bg-white/20;
   }
   
   /* Status Indicators */

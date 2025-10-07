@@ -25,7 +25,7 @@ router.get('/doctors', auth, async (req, res) => {
             const fallbackDoctors = [
                 {
                     id: 'dr001',
-                    name: 'Dr. Sarah Johnson',
+                    name: 'Dr. Priya Sharma',
                     specialty: 'General Medicine',
                     availability: 'Available now',
                     rating: 4.8,
@@ -34,7 +34,7 @@ router.get('/doctors', auth, async (req, res) => {
                 },
                 {
                     id: 'dr002', 
-                    name: 'Dr. Michael Chen',
+                    name: 'Dr. Rajesh Kumar',
                     specialty: 'Cardiology',
                     availability: 'Available in 15 min',
                     rating: 4.9,
@@ -141,7 +141,7 @@ router.get('/appointments', auth, async (req, res) => {
             const fallbackAppointments = [
                 {
                     id: 'apt001',
-                    doctor_name: 'Dr. Sarah Johnson',
+                    doctor_name: 'Dr. Priya Sharma',
                     specialty: 'General Medicine',
                     appointment_time: new Date(Date.now() + 2 * 60 * 60 * 1000),
                     status: 'confirmed',
@@ -149,7 +149,7 @@ router.get('/appointments', auth, async (req, res) => {
                 },
                 {
                     id: 'apt002',
-                    doctor_name: 'Dr. Michael Chen',
+                    doctor_name: 'Dr. Rajesh Kumar',
                     specialty: 'Cardiology',
                     appointment_time: new Date(Date.now() + 24 * 60 * 60 * 1000),
                     status: 'pending',
@@ -411,7 +411,7 @@ router.get('/consultation-history', auth, async (req, res) => {
             const fallbackHistory = [
                 {
                     id: 'cons001',
-                    doctor_name: 'Dr. Sarah Johnson',
+                    doctor_name: 'Dr. Priya Sharma',
                     specialty: 'General Medicine',
                     date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
                     duration: 25,
@@ -420,7 +420,7 @@ router.get('/consultation-history', auth, async (req, res) => {
                 },
                 {
                     id: 'cons002',
-                    doctor_name: 'Dr. Michael Chen',
+                    doctor_name: 'Dr. Rajesh Kumar',
                     specialty: 'Cardiology',
                     date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
                     duration: 40,

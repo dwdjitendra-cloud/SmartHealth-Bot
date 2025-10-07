@@ -68,19 +68,19 @@ const Home: React.FC = () => {
 
   const testimonials = [
     {
-      name: 'Sarah Johnson',
+      name: 'Pookie',
       role: 'Patient',
-      content: 'SmartHealth helped me get quick answers about my symptoms and connected me with the right doctor immediately.',
+      content: 'SmartHealthBot helped me get quick answers about my symptoms and connected me with the right doctor immediately.',
       rating: 5
     },
     {
-      name: 'Dr. Michael Chen',
+      name: 'Dr. Rajesh Sharma',
       role: 'Cardiologist',
       content: 'The AI-powered platform makes remote consultations more efficient and accurate than ever before.',
       rating: 5
     },
     {
-      name: 'Emily Rodriguez',
+      name: 'Abhilasha',
       role: 'Working Mom',
       content: 'Being able to check symptoms and consult doctors from home has been a game-changer for our family.',
       rating: 5
@@ -339,7 +339,7 @@ const Home: React.FC = () => {
           onClick={() => setShowDeveloperPopup(true)}
           className="text-healthcare-neutral-500 hover:text-healthcare-primary-600 text-sm font-medium transition-colors duration-200"
         >
-          Made with ❤️ by Jitendra Singh
+          Meet the Developer
         </button>
       </div>
 
@@ -360,16 +360,16 @@ const Home: React.FC = () => {
               <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <User className="h-10 w-10 text-white" />
               </div>
-              <h4 className="text-xl font-heading font-bold text-healthcare-neutral-900 mb-2">Jitendra Singh</h4>
+              <h4 className="text-xl font-heading font-bold text-healthcare-neutral-900 mb-2">Jitendra</h4>
               <p className="text-healthcare-neutral-600">Full Stack Developer</p>
             </div>
             <p className="text-healthcare-neutral-700 text-center mb-6 leading-relaxed">
               Passionate about creating innovative healthcare solutions that improve lives. 
-              SmartHealth combines AI technology with user-centered design to make healthcare more accessible.
+              SmartHealthBot combines AI technology with user-centered design to make healthcare more accessible.
             </p>
             <div className="flex justify-center space-x-4">
               <a 
-                href="https://linkedin.com/in/jitendra-singh" 
+                href="https://www.linkedin.com/in/dwdjitendra/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="btn-secondary btn-sm group"
@@ -378,7 +378,7 @@ const Home: React.FC = () => {
                 LinkedIn
               </a>
               <a 
-                href="https://github.com/jitendra-singh" 
+                href="https://dwdjitendra-portfolio.vercel.app/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="btn-primary btn-sm group"

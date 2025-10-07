@@ -62,20 +62,20 @@ const Navbar: React.FC = () => {
   return (
     <>
       {/* Main Navbar */}
-      <nav className="bg-white/95 backdrop-blur-lg border-b border-healthcare-neutral-200/50 sticky top-0 z-50 shadow-soft">
+      <nav className="bg-healthcare-primary-900 backdrop-blur-lg border-b border-healthcare-primary-800 sticky top-0 z-50 shadow-soft">
         <div className="container-healthcare">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-3 group">
               <div className="relative">
-                <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-healthcare transition-all duration-300 group-hover:scale-105">
+                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center shadow-healthcare transition-all duration-300 group-hover:scale-105">
                   <Heart className="h-5 w-5 text-white" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-healthcare-accent-500 rounded-full animate-pulse-soft"></div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-healthcare-accent-400 rounded-full animate-pulse-soft"></div>
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-heading font-bold text-healthcare-neutral-900">SmartHealth</span>
-                <span className="text-xs text-healthcare-neutral-500 font-medium hidden sm:block">AI Healthcare Assistant</span>
+                <span className="text-xl font-heading font-bold text-white">SmartHealthBot</span>
+                <span className="text-xs text-healthcare-primary-200 font-medium hidden sm:block">AI Healthcare Assistant</span>
               </div>
             </Link>
 
@@ -99,16 +99,16 @@ const Navbar: React.FC = () => {
                 <div className="relative" ref={profileDropdownRef}>
                   <button
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    className="flex items-center space-x-3 p-2 rounded-xl hover:bg-healthcare-neutral-100 transition-colors duration-200"
+                    className="flex items-center space-x-3 p-2 rounded-xl hover:bg-white/10 transition-colors duration-200"
                   >
-                    <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                       <User className="h-4 w-4 text-white" />
                     </div>
                     <div className="hidden sm:block text-left">
-                      <p className="text-sm font-medium text-healthcare-neutral-900">{user.name}</p>
-                      <p className="text-xs text-healthcare-neutral-500">{user.email}</p>
+                      <p className="text-sm font-medium text-white">{user.name}</p>
+                      <p className="text-xs text-healthcare-primary-200">{user.email}</p>
                     </div>
-                    <ChevronDown className={`h-4 w-4 text-healthcare-neutral-500 transition-transform duration-200 ${isProfileOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`h-4 w-4 text-healthcare-primary-200 transition-transform duration-200 ${isProfileOpen ? 'rotate-180' : ''}`} />
                   </button>
 
                   {/* Profile Dropdown */}
@@ -140,10 +140,10 @@ const Navbar: React.FC = () => {
                 </div>
               ) : (
                 <div className="flex items-center space-x-3">
-                  <Link to="/login" className="btn-ghost btn-sm">
+                  <Link to="/login" className="text-white/80 hover:text-white px-4 py-2 text-sm font-medium transition-colors duration-200">
                     Sign In
                   </Link>
-                  <Link to="/register" className="btn-primary btn-sm">
+                  <Link to="/register" className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
                     Get Started
                   </Link>
                 </div>
@@ -152,12 +152,12 @@ const Navbar: React.FC = () => {
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-2 rounded-lg hover:bg-healthcare-neutral-100 transition-colors duration-200"
+                className="lg:hidden p-2 rounded-lg hover:bg-white/10 transition-colors duration-200"
               >
                 {isMobileMenuOpen ? (
-                  <X className="h-5 w-5 text-healthcare-neutral-600" />
+                  <X className="h-5 w-5 text-white" />
                 ) : (
-                  <Menu className="h-5 w-5 text-healthcare-neutral-600" />
+                  <Menu className="h-5 w-5 text-white" />
                 )}
               </button>
             </div>
@@ -166,7 +166,7 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white border-t border-healthcare-neutral-200/50 animate-slide-up">
+          <div className="lg:hidden bg-healthcare-primary-800 border-t border-white/10 animate-slide-up">
             <div className="container-healthcare py-4">
               <div className="space-y-2">
                 {mainNavLinks.map(({ path, label, icon: Icon }) => (
@@ -175,8 +175,8 @@ const Navbar: React.FC = () => {
                     to={path}
                     className={`flex items-center px-4 py-3 rounded-xl transition-colors duration-200 ${
                       isActive(path)
-                        ? 'bg-healthcare-primary-50 text-healthcare-primary-700'
-                        : 'text-healthcare-neutral-700 hover:bg-healthcare-neutral-50'
+                        ? 'bg-white/20 text-white'
+                        : 'text-white/80 hover:bg-white/10'
                     }`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >

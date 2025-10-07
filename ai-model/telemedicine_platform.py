@@ -23,12 +23,12 @@ class TelemedicinePlatform:
     def initialize_mock_doctors(self):
         """Initialize mock doctor availability data"""
         doctors = [
-            {'id': 'dr001', 'name': 'Dr. Sarah Johnson', 'specialty': 'General Medicine', 'rating': 4.8},
-            {'id': 'dr002', 'name': 'Dr. Michael Chen', 'specialty': 'Cardiology', 'rating': 4.9},
-            {'id': 'dr003', 'name': 'Dr. Emily Davis', 'specialty': 'Dermatology', 'rating': 4.7},
-            {'id': 'dr004', 'name': 'Dr. James Wilson', 'specialty': 'Psychiatry', 'rating': 4.6},
-            {'id': 'dr005', 'name': 'Dr. Lisa Brown', 'specialty': 'Pediatrics', 'rating': 4.9},
-            {'id': 'dr006', 'name': 'Dr. Robert Garcia', 'specialty': 'Orthopedics', 'rating': 4.8},
+            {'id': 'dr001', 'name': 'Dr. Priya Sharma', 'specialty': 'General Medicine', 'rating': 4.8},
+            {'id': 'dr002', 'name': 'Dr. Rajesh Kumar', 'specialty': 'Cardiology', 'rating': 4.9},
+            {'id': 'dr003', 'name': 'Dr. Anita Patel', 'specialty': 'Dermatology', 'rating': 4.7},
+            {'id': 'dr004', 'name': 'Dr. Arjun Singh', 'specialty': 'Psychiatry', 'rating': 4.6},
+            {'id': 'dr005', 'name': 'Dr. Kavya Menon', 'specialty': 'Pediatrics', 'rating': 4.9},
+            {'id': 'dr006', 'name': 'Dr. Vikram Gupta', 'specialty': 'Orthopedics', 'rating': 4.8},
         ]
         
         for doctor in doctors:

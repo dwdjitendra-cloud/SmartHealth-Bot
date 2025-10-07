@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const sampleDoctors = [
   {
-    name: 'Dr. Sarah Johnson',
+    name: 'Dr. Priya Sharma',
     specialization: 'General Medicine',
     qualification: 'MBBS, MD',
     experience: 8,
@@ -18,21 +18,21 @@ const sampleDoctors = [
       ]
     },
     contact: {
-      phone: '+1-555-0101',
-      email: 'sarah.johnson@hospital.com'
+      phone: '+91-98765-43210',
+      email: 'priya.sharma@hospital.com'
     },
     hospital: {
       name: 'City General Hospital',
       address: '123 Medical Center Dr',
-      city: 'New York'
+      city: 'Mumbai'
     },
     profileImage: 'https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg',
-    languages: ['English', 'Spanish'],
+    languages: ['English', 'Hindi'],
     consultationModes: ['video', 'audio', 'chat'],
     totalConsultations: 245
   },
   {
-    name: 'Dr. Michael Chen',
+    name: 'Dr. Rajesh Kumar',
     specialization: 'Cardiology',
     qualification: 'MBBS, MD, DM Cardiology',
     experience: 12,
@@ -46,21 +46,21 @@ const sampleDoctors = [
       ]
     },
     contact: {
-      phone: '+1-555-0102',
-      email: 'michael.chen@cardiaccare.com'
+      phone: '+91-98765-43211',
+      email: 'rajesh.kumar@cardiaccare.com'
     },
     hospital: {
       name: 'Heart Care Specialist Center',
       address: '456 Cardiac Ave',
-      city: 'Los Angeles'
+      city: 'Delhi'
     },
     profileImage: 'https://images.pexels.com/photos/6749778/pexels-photo-6749778.jpeg',
-    languages: ['English', 'Mandarin'],
+    languages: ['English', 'Hindi'],
     consultationModes: ['video', 'audio'],
     totalConsultations: 189
   },
   {
-    name: 'Dr. Emily Rodriguez',
+    name: 'Dr. Anita Patel',
     specialization: 'Dermatology',
     qualification: 'MBBS, MD Dermatology',
     experience: 6,
@@ -74,21 +74,21 @@ const sampleDoctors = [
       ]
     },
     contact: {
-      phone: '+1-555-0103',
-      email: 'emily.rodriguez@skincare.com'
+      phone: '+91-98765-43212',
+      email: 'anita.patel@skincare.com'
     },
     hospital: {
       name: 'Advanced Skin Care Clinic',
       address: '789 Beauty Blvd',
-      city: 'Miami'
+      city: 'Bangalore'
     },
     profileImage: 'https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg',
-    languages: ['English', 'Spanish', 'Portuguese'],
+    languages: ['English', 'Hindi', 'Gujarati'],
     consultationModes: ['video', 'chat'],
     totalConsultations: 156
   },
   {
-    name: 'Dr. James Wilson',
+    name: 'Dr. Arjun Singh',
     specialization: 'Neurology',
     qualification: 'MBBS, MD, DM Neurology',
     experience: 15,
@@ -102,21 +102,21 @@ const sampleDoctors = [
       ]
     },
     contact: {
-      phone: '+1-555-0104',
-      email: 'james.wilson@neurocare.com'
+      phone: '+91-98765-43213',
+      email: 'arjun.singh@neurocare.com'
     },
     hospital: {
       name: 'Neurological Institute',
       address: '321 Brain St',
-      city: 'Chicago'
+      city: 'Chennai'
     },
     profileImage: 'https://images.pexels.com/photos/5327656/pexels-photo-5327656.jpeg',
-    languages: ['English'],
+    languages: ['English', 'Hindi', 'Tamil'],
     consultationModes: ['video', 'audio'],
     totalConsultations: 298
   },
   {
-    name: 'Dr. Priya Patel',
+    name: 'Dr. Kavya Menon',
     specialization: 'Pediatrics',
     qualification: 'MBBS, MD Pediatrics',
     experience: 9,
@@ -130,21 +130,21 @@ const sampleDoctors = [
       ]
     },
     contact: {
-      phone: '+1-555-0105',
-      email: 'priya.patel@childcare.com'
+      phone: '+91-98765-43214',
+      email: 'kavya.menon@childcare.com'
     },
     hospital: {
       name: 'Children\'s Medical Center',
       address: '654 Kids Lane',
-      city: 'Houston'
+      city: 'Kochi'
     },
     profileImage: 'https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg',
-    languages: ['English', 'Hindi', 'Gujarati'],
+    languages: ['English', 'Hindi', 'Malayalam'],
     consultationModes: ['video', 'audio', 'chat'],
     totalConsultations: 203
   },
   {
-    name: 'Dr. Robert Kim',
+    name: 'Dr. Vikram Gupta',
     specialization: 'Orthopedics',
     qualification: 'MBBS, MS Orthopedics',
     experience: 11,
@@ -158,16 +158,16 @@ const sampleDoctors = [
       ]
     },
     contact: {
-      phone: '+1-555-0106',
-      email: 'robert.kim@orthocenter.com'
+      phone: '+91-98765-43215',
+      email: 'vikram.gupta@orthocenter.com'
     },
     hospital: {
       name: 'Orthopedic Specialty Hospital',
       address: '987 Bone Ave',
-      city: 'Seattle'
+      city: 'Pune'
     },
     profileImage: 'https://images.pexels.com/photos/6749777/pexels-photo-6749777.jpeg',
-    languages: ['English', 'Korean'],
+    languages: ['English', 'Hindi', 'Marathi'],
     consultationModes: ['video', 'audio'],
     totalConsultations: 167
   }
