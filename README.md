@@ -396,12 +396,19 @@ The AI model service is successfully deployed on Render with:
 - ✅ Machine learning models loaded
 - ✅ Symptom analysis endpoints active
 
-### Backend Deployment (Render)
-**Status**: Ready for deployment
-**Next**: Deploy Express server with AI model integration
-1. Configure environment variables (AI_MODEL_URL, MONGODB_URI, JWT_SECRET)
-2. Deploy the `server` folder to Render
-3. Connect to deployed AI model service
+### ✅ Backend Deployment (Render) - LIVE
+**🔧 Backend URL**: [https://smarthealth-bot-server.onrender.com](https://smarthealth-bot-server.onrender.com)
+
+The backend service is successfully deployed on Render with:
+- ✅ Node.js 22.16.0 with Express server
+- ✅ All dependencies installed successfully
+- ✅ Connected to AI model service
+- ⚠️ **Needs MongoDB Atlas configuration** (add MONGODB_URI environment variable)
+
+### 🔧 Final Configuration Steps
+1. **Set up MongoDB Atlas** and add connection string to Render environment variables
+2. **Update Vercel frontend** environment variables with backend URL
+3. **Test full end-to-end functionality**
 
 ## 📱 Usage Guide
 
