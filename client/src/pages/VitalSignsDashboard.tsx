@@ -44,7 +44,8 @@ const VitalSignsDashboard: React.FC = () => {
     blood_pressure_diastolic: '',
     temperature: '',
     oxygen_saturation: '',
-    stress_level: ''
+    stress_level: '',
+    steps: ''
   });
   const [showManualEntry, setShowManualEntry] = useState(false);
 
@@ -117,7 +118,8 @@ const VitalSignsDashboard: React.FC = () => {
             blood_pressure_diastolic: '',
             temperature: '',
             oxygen_saturation: '',
-            stress_level: ''
+            stress_level: '',
+            steps: ''
           });
           setShowManualEntry(false);
         }
@@ -303,6 +305,17 @@ const VitalSignsDashboard: React.FC = () => {
                   onChange={(e) => setManualEntry({...manualEntry, stress_level: e.target.value})}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2"
                   placeholder="e.g., 3"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Steps</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={manualEntry.steps}
+                  onChange={(e) => setManualEntry({...manualEntry, steps: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  placeholder="e.g., 5000"
                 />
               </div>
             </div>

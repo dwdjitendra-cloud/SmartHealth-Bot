@@ -2,6 +2,7 @@ const express = require('express');
 const { query, validationResult } = require('express-validator');
 const Doctor = require('../models/Doctor');
 const auth = require('../middleware/auth');
+const { seedDoctors, sampleDoctors } = require('../utils/seedDoctors');
 
 const router = express.Router();
 
@@ -173,6 +174,42 @@ router.post('/search', auth, async (req, res) => {
     console.error('Doctor search error:', error);
     res.status(500).json({
       message: 'Server error during search'
+    });
+  }
+});
+
+/**
+ * @route   POST /api/doctors/seed
+ * @desc    Seed database with sample doctors (development only)
+ * @access  Public
+ */
+router.post('/seed', async (req, res) => {
+  try {
+    // Check if doctors already exist
+    const existingDoctors = await Doctor.countDocuments();
+    
+    if (existingDoctors > 0) {
+      return res.json({
+        message: 'Doctors already exist in database',
+        count: existingDoctors
+      });
+    }
+
+    // Seed the database
+    await Doctor.insertMany(sampleDoctors);
+    
+    const count = await Doctor.countDocuments();
+    
+    res.json({
+      message: 'Database seeded successfully with sample doctors',
+      count: count
+    });
+
+  } catch (error) {
+    console.error('Seed doctors error:', error);
+    res.status(500).json({
+      message: 'Server error during seeding',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
