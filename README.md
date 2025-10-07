@@ -387,17 +387,21 @@ npm run build
 2. Deploy the `dist` folder to Vercel or your hosting service
 3. Set environment variables for API endpoints
 
-### Backend Deployment (Heroku/Railway)
-**Status**: Development (Local)
-1. Set environment variables
-2. Deploy the `server` folder
-3. Ensure MongoDB Atlas is configured
+### ✅ AI Model Deployment (Render) - LIVE
+**🤖 AI Model URL**: [https://smarthealth-bot-ai-model.onrender.com](https://smarthealth-bot-ai-model.onrender.com)
 
-### AI Model Deployment (Railway/Render)
-**Status**: Development (Local)
-1. Deploy the `ai-model` folder
-2. Set Python runtime
-3. Install requirements.txt
+The AI model service is successfully deployed on Render with:
+- ✅ Python 3.13.4 with compatible pandas/numpy
+- ✅ Flask API with CORS configured
+- ✅ Machine learning models loaded
+- ✅ Symptom analysis endpoints active
+
+### Backend Deployment (Render)
+**Status**: Ready for deployment
+**Next**: Deploy Express server with AI model integration
+1. Configure environment variables (AI_MODEL_URL, MONGODB_URI, JWT_SECRET)
+2. Deploy the `server` folder to Render
+3. Connect to deployed AI model service
 
 ## 📱 Usage Guide
 
