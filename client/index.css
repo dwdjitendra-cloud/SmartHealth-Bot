@@ -1,3 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans bg-healthcare-neutral-50 text-healthcare-neutral-800 antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold text-healthcare-neutral-900;
+  }
+  
+  h1 {
+    @apply text-4xl lg:text-5xl leading-tight;
+  }
+  
+  h2 {
+    @apply text-3xl lg:text-4xl leading-tight;
+  }
+  
+  h3 {
+    @apply text-2xl lg:text-3xl leading-snug;
+  }
+  
+  h4 {
+    @apply text-xl lg:text-2xl leading-snug;
+  }
+  
+  h5 {
+    @apply text-lg lg:text-xl leading-snug;
+  }
+  
+  h6 {
+    @apply text-base lg:text-lg leading-snug;
+  }
+  
+  p {
+    @apply text-healthcare-neutral-600 leading-relaxed;
+  }
+  
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-healthcare-primary-500 ring-offset-2 ring-offset-white;
+  }
+}
+
+@layer components {
+  /* Healthcare Card Styles */
+  .healthcare-card {
+    @apply bg-white rounded-2xl shadow-soft border border-healthcare-neutral-200/50 p-6 transition-all duration-300 hover:shadow-soft-lg hover:border-healthcare-primary-200;
+  }
+  
+  .healthcare-card-compact {
+    @apply bg-white rounded-xl shadow-soft border border-healthcare-neutral-200/50 p-4 transition-all duration-300 hover:shadow-soft-lg;
+  }
+  
+  /* Button Styles */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-healthcare-primary-600 text-white font-medium rounded-xl border border-transparent transition-all duration-200 hover:bg-healthcare-primary-700 focus:bg-healthcare-primary-700 active:bg-healthcare-primary-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md;
+  }
+  
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-white text-healthcare-primary-700 font-medium rounded-xl border border-healthcare-primary-200 transition-all duration-200 hover:bg-healthcare-primary-50 focus:bg-healthcare-primary-50 active:bg-healthcare-primary-100 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md;
+  }
+  
+  .btn-accent {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-healthcare-accent-600 text-white font-medium rounded-xl border border-transparent transition-all duration-200 hover:bg-healthcare-accent-700 focus:bg-healthcare-accent-700 active:bg-healthcare-accent-800 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md;
+  }
+  
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-transparent text-healthcare-neutral-700 font-medium rounded-xl border border-transparent transition-all duration-200 hover:bg-healthcare-neutral-100 focus:bg-healthcare-neutral-100 active:bg-healthcare-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-sm {
+    @apply px-4 py-2 text-sm;
+  }
+  
+  .btn-lg {
+    @apply px-8 py-4 text-lg;
+  }
+  
+  /* Form Styles */
+  .form-input {
+    @apply w-full px-4 py-3 bg-white border border-healthcare-neutral-300 rounded-xl text-healthcare-neutral-900 placeholder-healthcare-neutral-400 transition-all duration-200 focus:border-healthcare-primary-500 focus:ring-2 focus:ring-healthcare-primary-500/20 focus:outline-none;
+  }
+  
+  .form-label {
+    @apply block text-sm font-medium text-healthcare-neutral-700 mb-2;
+  }
+  
+  .form-error {
+    @apply text-sm text-healthcare-danger-600 mt-1;
+  }
+  
+  /* Navigation Styles */
+  .nav-link {
+    @apply relative px-4 py-2 text-healthcare-neutral-600 font-medium rounded-lg transition-all duration-200 hover:text-healthcare-primary-600 hover:bg-healthcare-primary-50 focus:text-healthcare-primary-600 focus:bg-healthcare-primary-50;
+  }
+  
+  .nav-link-active {
+    @apply text-healthcare-primary-600 bg-healthcare-primary-50;
+  }
+  
+  /* Status Indicators */
+  .status-success {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-healthcare-accent-100 text-healthcare-accent-800;
+  }
+  
+  .status-warning {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-healthcare-warning-100 text-healthcare-warning-800;
+  }
+  
+  .status-danger {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-healthcare-danger-100 text-healthcare-danger-800;
+  }
+  
+  .status-info {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-healthcare-primary-100 text-healthcare-primary-800;
+  }
+  
+  /* Healthcare Gradient Backgrounds */
+  .gradient-healthcare {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdf4 100%);
+  }
+  
+  .gradient-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  }
+  
+  /* Loading Animation */
+  .healthcare-pulse {
+    @apply animate-pulse-soft;
+  }
+  
+  /* Container Utilities */
+  .container-healthcare {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section-padding {
+    @apply py-16 lg:py-24;
+  }
+  
+  .section-padding-sm {
+    @apply py-8 lg:py-12;
+  }
+}

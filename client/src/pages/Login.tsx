@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Eye, EyeOff, Mail, Lock, Heart, Shield, Activity, Brain, Stethoscope } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Heart, Shield, Activity, ArrowRight, Bot } from 'lucide-react';
 import LoadingSpinner from '../../LoadingSpinner';
 import { validateForm, ValidationRules, sanitizeInput } from '../utils/validation';
 
@@ -50,50 +50,68 @@ const Login: React.FC = () => {
   };
 
   if (loading) {
-    return <LoadingSpinner text="Signing you in..." />;
+    return <LoadingSpinner variant="heart" text="Signing you in..." />;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      <div className="flex">
-        {/* Left Side - About SmartHealthBot */}
-        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-purple-700 p-12 items-center">
-          <div className="text-white space-y-8">
+    <div className="min-h-screen gradient-healthcare">
+      <div className="min-h-screen flex">
+        {/* Left Side - Healthcare Info */}
+        <div className="hidden lg:flex lg:w-1/2 bg-healthcare-primary-900 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-healthcare-primary-800 to-healthcare-primary-900"></div>
+          <div className="relative z-10 p-12 flex flex-col justify-center text-white">
             {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                <Heart className="h-7 w-7 text-white" />
+            <div className="flex items-center space-x-4 mb-12">
+              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                <Heart className="h-8 w-8 text-white" />
               </div>
-              <h1 className="text-3xl font-bold">SmartHealthBot</h1>
+              <div>
+                <h1 className="text-3xl font-heading font-bold">SmartHealth</h1>
+                <p className="text-healthcare-primary-200 text-sm">AI Healthcare Assistant</p>
+              </div>
             </div>
 
-            {/* About Content */}
-            <div className="space-y-6">
-              <h2 className="text-4xl font-bold leading-tight">
-                Your AI-Powered Healthcare Companion
-              </h2>
-              <p className="text-xl text-blue-100 leading-relaxed">
-                Experience the future of healthcare with our advanced AI-driven platform. 
-                Get personalized health insights, track vital signs, and connect with healthcare professionals.
-              </p>
+            {/* Content */}
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-4xl font-heading font-bold leading-tight mb-6">
+                  Your Health,
+                  <span className="block text-healthcare-accent-300">Intelligently Managed</span>
+                </h2>
+                <p className="text-xl text-healthcare-primary-100 leading-relaxed">
+                  Experience personalized healthcare with AI-powered insights, expert consultations, 
+                  and comprehensive health monitoring.
+                </p>
+              </div>
 
               {/* Features */}
-              <div className="space-y-4 mt-8">
-                <div className="flex items-center space-x-3">
-                  <Activity className="h-6 w-6 text-blue-200 flex-shrink-0" />
-                  <span className="text-lg">Real-time health monitoring</span>
+              <div className="space-y-6">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-healthcare-accent-500/20 rounded-xl flex items-center justify-center">
+                    <Bot className="h-6 w-6 text-healthcare-accent-300" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">AI Symptom Analysis</h3>
+                    <p className="text-healthcare-primary-200">Instant, accurate health assessments</p>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Brain className="h-6 w-6 text-blue-200 flex-shrink-0" />
-                  <span className="text-lg">AI-powered symptom analysis</span>
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-healthcare-accent-500/20 rounded-xl flex items-center justify-center">
+                    <Activity className="h-6 w-6 text-healthcare-accent-300" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">Health Monitoring</h3>
+                    <p className="text-healthcare-primary-200">Track vitals and progress over time</p>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Stethoscope className="h-6 w-6 text-blue-200 flex-shrink-0" />
-                  <span className="text-lg">Connect with verified doctors</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Shield className="h-6 w-6 text-blue-200 flex-shrink-0" />
-                  <span className="text-lg">Secure & private health data</span>
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-healthcare-accent-500/20 rounded-xl flex items-center justify-center">
+                    <Shield className="h-6 w-6 text-healthcare-accent-300" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg">Secure & Private</h3>
+                    <p className="text-healthcare-primary-200">Enterprise-grade data protection</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -104,35 +122,50 @@ const Login: React.FC = () => {
         <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
           <div className="max-w-md w-full space-y-8">
             {/* Mobile Logo */}
-            <div className="lg:hidden text-center">
-              <div className="flex justify-center mb-4">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="lg:hidden text-center mb-8">
+              <div className="flex justify-center mb-6">
+                <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-healthcare">
                   <Heart className="h-8 w-8 text-white" />
                 </div>
               </div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">SmartHealthBot</h1>
-              <p className="text-gray-600">Your AI Healthcare Companion</p>
+              <h1 className="text-2xl font-heading font-bold text-healthcare-neutral-900 mb-2">SmartHealth</h1>
+              <p className="text-healthcare-neutral-600">AI Healthcare Assistant</p>
             </div>
 
-            {/* Login Form */}
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 text-center lg:text-left">
+            {/* Form Header */}
+            <div className="text-center lg:text-left">
+              <h2 className="text-3xl font-heading font-bold text-healthcare-neutral-900 mb-3">
                 Welcome Back
               </h2>
-              <p className="mt-2 text-gray-600 text-center lg:text-left">
-                Sign in to access your health dashboard
+              <p className="text-healthcare-neutral-600">
+                Sign in to access your health dashboard and continue your wellness journey.
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+            {/* Demo Credentials */}
+            <div className="healthcare-card-compact bg-healthcare-accent-50 border-healthcare-accent-200">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-8 h-8 bg-healthcare-accent-500 rounded-lg flex items-center justify-center">
+                  <Bot className="h-4 w-4 text-white" />
+                </div>
+                <h3 className="font-semibold text-healthcare-accent-800">Demo Account</h3>
+              </div>
+              <div className="space-y-1 text-sm text-healthcare-accent-700">
+                <p><strong>Email:</strong> test@example.com</p>
+                <p><strong>Password:</strong> test123</p>
+              </div>
+            </div>
+
+            {/* Login Form */}
+            <div className="healthcare-card">
               <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="email" className="form-label">
                     Email Address
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Mail className="h-5 w-5 text-gray-400" />
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Mail className="h-5 w-5 text-healthcare-neutral-400" />
                     </div>
                     <input
                       id="email"
@@ -141,27 +174,24 @@ const Login: React.FC = () => {
                       autoComplete="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`block w-full pl-10 pr-3 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                        errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+                      className={`form-input pl-11 ${
+                        errors.email ? 'border-healthcare-danger-300 bg-healthcare-danger-50' : ''
                       }`}
                       placeholder="Enter your email"
                     />
                   </div>
                   {errors.email && (
-                    <p className="mt-2 text-sm text-red-600 flex items-center">
-                      <span className="w-1 h-1 bg-red-600 rounded-full mr-2"></span>
-                      {errors.email}
-                    </p>
+                    <p className="form-error">{errors.email}</p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="password" className="form-label">
                     Password
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-gray-400" />
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Lock className="h-5 w-5 text-healthcare-neutral-400" />
                     </div>
                     <input
                       id="password"
@@ -170,73 +200,80 @@ const Login: React.FC = () => {
                       autoComplete="current-password"
                       value={formData.password}
                       onChange={handleChange}
-                      className={`block w-full pl-10 pr-10 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                        errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+                      className={`form-input pl-11 pr-11 ${
+                        errors.password ? 'border-healthcare-danger-300 bg-healthcare-danger-50' : ''
                       }`}
                       placeholder="Enter your password"
                     />
                     <button
                       type="button"
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-blue-600 transition-colors"
+                      className="absolute inset-y-0 right-0 pr-4 flex items-center"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
-                        <EyeOff className="h-5 w-5 text-gray-400" />
+                        <EyeOff className="h-5 w-5 text-healthcare-neutral-400 hover:text-healthcare-neutral-600" />
                       ) : (
-                        <Eye className="h-5 w-5 text-gray-400" />
+                        <Eye className="h-5 w-5 text-healthcare-neutral-400 hover:text-healthcare-neutral-600" />
                       )}
                     </button>
                   </div>
                   {errors.password && (
-                    <p className="mt-2 text-sm text-red-600 flex items-center">
-                      <span className="w-1 h-1 bg-red-600 rounded-full mr-2"></span>
-                      {errors.password}
-                    </p>
+                    <p className="form-error">{errors.password}</p>
                   )}
                 </div>
 
-                <div className="space-y-4">
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    {loading ? (
-                      <span className="flex items-center">
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Signing in...
-                      </span>
-                    ) : (
-                      'Sign In'
-                    )}
-                  </button>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <input
+                      id="remember-me"
+                      name="remember-me"
+                      type="checkbox"
+                      className="h-4 w-4 text-healthcare-primary-600 focus:ring-healthcare-primary-500 border-healthcare-neutral-300 rounded"
+                    />
+                    <label htmlFor="remember-me" className="ml-2 block text-sm text-healthcare-neutral-700">
+                      Remember me
+                    </label>
+                  </div>
 
-                  <div className="text-center">
-                    <p className="text-sm text-gray-600">
-                      Don't have an account?{' '}
-                      <Link
-                        to="/register"
-                        className="font-semibold text-blue-600 hover:text-purple-600 transition-colors"
-                      >
-                        Sign up here
-                      </Link>
-                    </p>
+                  <div className="text-sm">
+                    <Link
+                      to="/forgot-password"
+                      className="font-medium text-healthcare-primary-600 hover:text-healthcare-primary-700 transition-colors duration-200"
+                    >
+                      Forgot password?
+                    </Link>
                   </div>
                 </div>
-              </form>
-            </div>
 
-            {/* Trust Indicators */}
-            <div className="text-center space-y-2">
-              <p className="text-xs text-gray-500">Trusted by thousands of healthcare professionals</p>
-              <div className="flex justify-center items-center space-x-4 text-gray-400">
-                <Shield className="h-4 w-4" />
-                <span className="text-xs">256-bit SSL Encryption</span>
-                <span className="text-xs">•</span>
-                <span className="text-xs">HIPAA Compliant</span>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-primary w-full group"
+                >
+                  {loading ? (
+                    <div className="flex items-center justify-center">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                      Signing in...
+                    </div>
+                  ) : (
+                    <>
+                      Sign in to Dashboard
+                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </>
+                  )}
+                </button>
+              </form>
+
+              <div className="mt-6 text-center">
+                <p className="text-healthcare-neutral-600">
+                  Don't have an account?{' '}
+                  <Link
+                    to="/register"
+                    className="font-medium text-healthcare-primary-600 hover:text-healthcare-primary-700 transition-colors duration-200"
+                  >
+                    Create one now
+                  </Link>
+                </p>
               </div>
             </div>
           </div>
