@@ -49,6 +49,14 @@ const Login: React.FC = () => {
     }
   };
 
+  const fillDemoCredentials = () => {
+    setFormData({
+      email: 'test@example.com',
+      password: 'test123'
+    });
+    setErrors({});
+  };
+
   if (loading) {
     return <LoadingSpinner variant="heart" text="Signing you in..." />;
   }
@@ -148,11 +156,24 @@ const Login: React.FC = () => {
                 <div className="w-8 h-8 bg-healthcare-accent-500 rounded-lg flex items-center justify-center">
                   <Bot className="h-4 w-4 text-white" />
                 </div>
-                <h3 className="font-semibold text-healthcare-accent-800">Demo Account</h3>
+                <h3 className="font-semibold text-healthcare-accent-800">Try Demo Account</h3>
               </div>
-              <div className="space-y-1 text-sm text-healthcare-accent-700">
-                <p><strong>Email:</strong> test@example.com</p>
-                <p><strong>Password:</strong> test123</p>
+              <div className="space-y-2 text-sm">
+                <button
+                  type="button"
+                  onClick={fillDemoCredentials}
+                  className="w-full flex items-center justify-between p-3 bg-white rounded-lg border border-healthcare-accent-200 hover:border-healthcare-accent-300 hover:bg-healthcare-accent-25 transition-colors duration-200 group"
+                >
+                  <span className="text-healthcare-neutral-600">📧 Email:</span>
+                  <code className="text-healthcare-accent-700 font-medium bg-healthcare-accent-100 px-2 py-1 rounded group-hover:bg-healthcare-accent-200">test@example.com</code>
+                </button>
+                <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-healthcare-accent-200">
+                  <span className="text-healthcare-neutral-600">🔒 Password:</span>
+                  <code className="text-healthcare-accent-700 font-medium bg-healthcare-accent-100 px-2 py-1 rounded">test123</code>
+                </div>
+                <p className="text-xs text-healthcare-accent-600 mt-2 text-center">
+                  👆 Click above to auto-fill demo credentials
+                </p>
               </div>
             </div>
 
