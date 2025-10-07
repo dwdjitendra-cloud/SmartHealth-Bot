@@ -1,40 +1,17 @@
-{{{
-
+{
   "builds": [
-
-    {  "builds": [  "rewrites": [
-
+    {
       "src": "client/package.json",
-
-      "use": "@vercel/static-build",    {    {
-
+      "use": "@vercel/static-build",
       "config": {
-
-        "distDir": "dist"      "src": "client/package.json",      "source": "/(.*)",
-
+        "distDir": "dist"
       }
-
-    }      "use": "@vercel/static-build",      "destination": "/index.html"
-
+    }
   ],
-
-  "routes": [      "config": {    }
-
+  "rewrites": [
     {
-
-      "src": "/(.*)",        "distDir": "dist"  ]
-
-      "dest": "/client/$1"
-
-    }      }}
-
-  ]    }
-
-}  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/client/$1"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
