@@ -151,7 +151,7 @@ const Navbar: React.FC = () => {
           {!user && (
             <div className="space-y-4">
               <div className="px-4 py-3 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 rounded-2xl border border-emerald-400/40">
-                <h3 className="text-lg font-bold text-emerald-200 uppercase tracking-wide flex items-center space-x-3">
+                <h3 className="text-lg font-bold text-white uppercase tracking-wide flex items-center space-x-3">
                   <div className="p-2 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-lg">
                     <Bot className="h-5 w-5 text-white" />
                   </div>
@@ -169,8 +169,8 @@ const Navbar: React.FC = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <h4 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">AI-Powered Healthcare</h4>
-                    <p className="text-sm text-gray-700 leading-relaxed">
+                    <h4 className="text-xl font-bold text-white">AI-Powered Healthcare</h4>
+                    <p className="text-sm text-white leading-relaxed">
                       Sign in to access your personalized health dashboard and AI insights.
                     </p>
                   </div>
@@ -256,7 +256,7 @@ const Navbar: React.FC = () => {
             <div className="space-y-3">
               <Link
                 to="/login"
-                className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-slate-200 hover:bg-slate-700/50 rounded-xl transition-all duration-300 border border-slate-700/50 hover:border-slate-600"
+                className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white hover:bg-slate-700/50 rounded-xl transition-all duration-300 border border-slate-700/50 hover:border-slate-600"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Login
