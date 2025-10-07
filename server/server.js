@@ -67,6 +67,23 @@ app.use('/api/medications', medicationRoutes);
 app.use('/api/telemedicine', telemedicineRoutes);
 app.use('/api/mental-health', mentalHealthRoutes);
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'SmartHealthBot API Server',
+    status: 'Running',
+    version: '1.0.0',
+    endpoints: [
+      '/api/health',
+      '/api/auth',
+      '/api/symptoms', 
+      '/api/doctors',
+      '/api/payments',
+      '/api/dashboard'
+    ]
+  });
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ 
