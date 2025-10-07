@@ -87,12 +87,28 @@ const SymptomChecker: React.FC = () => {
     try {
       // Use test endpoint for demo (bypasses authentication)
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      console.log('Analyzing symptoms with API:', apiUrl);
+      console.log('Symptoms to analyze:', symptoms.trim());
+      
       const response = await axios.post(`${apiUrl}/symptoms/test`, {
         symptoms: symptoms.trim()
       });
 
+      console.log('API Response:', response.data);
+
       // Transform response to match expected format
       const analysisData = response.data.analysis;
+      
+      if (!analysisData) {
+        throw new Error('No analysis data received from server');
+      }
+      
+      // Check if this is a fallback "Service Unavailable" response
+      if (analysisData.disease === 'Service Unavailable') {
+        toast.error('AI analysis service is temporarily unavailable. Please try again in a few moments.');
+        return;
+      }
+      
       setAnalysis({
         id: 'demo-' + Date.now(),
         disease: analysisData.disease,
@@ -109,6 +125,7 @@ const SymptomChecker: React.FC = () => {
       
     } catch (error: any) {
       console.error('Error analyzing symptoms:', error);
+      console.error('Error response:', error.response?.data);
       
       if (error.response?.status === 400) {
         const errorData = error.response.data;
@@ -117,6 +134,10 @@ const SymptomChecker: React.FC = () => {
         if (errorData.suggestions) {
           toast.error(errorData.suggestions, { duration: 6000 });
         }
+      } else if (error.response?.status >= 500) {
+        toast.error('Server error. Please try again later.');
+      } else if (error.code === 'NETWORK_ERROR' || !error.response) {
+        toast.error('Network error. Please check your connection.');
       } else {
         toast.error('Failed to analyze symptoms. Please try again.');
       }

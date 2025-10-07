@@ -54,7 +54,7 @@ const VitalSignsDashboard: React.FC = () => {
 
   const loadLatestVitalSigns = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/vital-signs/latest');
+      const response = await axios.get('/vital-signs/latest');
       
       if (response.data.success && response.data.data.has_data) {
         setVitalSignsData(response.data.data.recent_readings);
@@ -67,7 +67,7 @@ const VitalSignsDashboard: React.FC = () => {
 
   const loadAnalysis = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/vital-signs/analysis');
+      const response = await axios.get('/vital-signs/analysis');
       
       if (response.data.success) {
         setAnalysis(response.data.data);
@@ -82,7 +82,7 @@ const VitalSignsDashboard: React.FC = () => {
       setIsSimulating(true);
       const duration = selectedPeriod === '24h' ? 24 : selectedPeriod === '7d' ? 168 : 720;
 
-      const response = await axios.get(`http://localhost:5001/api/vital-signs/simulate?duration=${duration}`);
+      const response = await axios.get(`/vital-signs/simulate?duration=${duration}`);
 
       if (response.status === 200) {
         const data = response.data;
@@ -105,7 +105,7 @@ const VitalSignsDashboard: React.FC = () => {
         return;
       }
 
-      const response = await axios.post('http://localhost:5001/api/vital-signs/manual', manualEntry);
+      const response = await axios.post('/vital-signs/manual', manualEntry);
 
       if (response.status === 200) {
         const data = response.data;

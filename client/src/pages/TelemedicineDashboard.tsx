@@ -98,7 +98,7 @@ const TelemedicineDashboard = () => {
 
   const fetchAnalytics = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/telemedicine/analytics', {
+      const response = await axios.get('/telemedicine/analytics', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -118,7 +118,7 @@ const TelemedicineDashboard = () => {
       if (selectedSpecialty) params.append('specialty', selectedSpecialty);
       if (selectedConsultationType) params.append('consultation_type', selectedConsultationType);
 
-      const response = await axios.get(`http://localhost:5001/api/telemedicine/doctors?${params}`, {
+      const response = await axios.get(`/telemedicine/doctors?${params}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -138,7 +138,7 @@ const TelemedicineDashboard = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/telemedicine/appointments', {
+      const response = await axios.get('/telemedicine/appointments', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -153,7 +153,7 @@ const TelemedicineDashboard = () => {
 
   const fetchConsultationHistory = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/telemedicine/consultation-history', {
+      const response = await axios.get('/telemedicine/consultation-history', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -175,7 +175,7 @@ const TelemedicineDashboard = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5001/api/telemedicine/book', bookingForm, {
+      const response = await axios.post('/telemedicine/book', bookingForm, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -206,7 +206,7 @@ const TelemedicineDashboard = () => {
 
   const joinWaitingRoom = async (appointmentId: string) => {
     try {
-      const response = await axios.post('http://localhost:5001/api/telemedicine/waiting-room', 
+      const response = await axios.post('/telemedicine/waiting-room', 
         { appointment_id: appointmentId },
         {
           headers: {
@@ -233,7 +233,7 @@ const TelemedicineDashboard = () => {
     if (!confirm('Are you sure you want to cancel this appointment?')) return;
 
     try {
-      const response = await axios.delete('http://localhost:5001/api/telemedicine/cancel', {
+      const response = await axios.delete('/telemedicine/cancel', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
