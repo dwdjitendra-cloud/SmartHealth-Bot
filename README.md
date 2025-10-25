@@ -1,3 +1,5 @@
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 # SmartHealthBot - AI-Powered Healthcare Application
 
 A comprehensive full-stack healthcare application with AI-powered symptom analysis, doctor consultations, payment integration, and modern responsive UI. Built with React, Node.js, Python Flask, and MongoDB for a complete healthcare management experience.
