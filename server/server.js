@@ -26,25 +26,37 @@ const mentalHealthRoutes = require('./routes/mental-health');
 
 const app = express();
 
+// CORS configuration (place BEFORE any middleware that may end the request)
+const allowedOrigins = (process.env.CORS_ORIGIN
+  || 'http://localhost:5173,http://localhost:5174,http://localhost:3000,https://smart-health-bot.vercel.app')
+  .split(',')
+  .map(o => o.trim());
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow non-browser requests (no Origin) and allowed origins
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Length']
+};
+
+app.use(cors(corsOptions));
+// Explicitly handle preflight for all routes
+app.options('*', cors(corsOptions));
+
 // Security middleware
 app.use(helmet());
 app.use(securityHeaders);
 app.use(validateRequestSize);
 app.use(sanitizeInput);
 
-// Rate limiting
+// Rate limiting (after CORS so preflight is not blocked)
 app.use('/api/', apiLimiter);
-
-// CORS configuration
-app.use(cors({
-  origin: [
-    'http://localhost:5173', 
-    'http://localhost:5174', 
-    'http://localhost:3000',
-    'https://smart-health-bot.vercel.app'
-  ],
-  credentials: true
-}));
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
