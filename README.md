@@ -17,7 +17,7 @@ Experience the SmartHealthBot application live! The frontend is deployed and ful
 ## 👨‍💻 Developer
 
 **Jitendra Kumar Dodwadiya**  
-📧 Email: [jitendrakumar637587@gmail.com](mailto:jitendrakumar637587@gmail.com)  
+📧 Email: [dwdjitendra2003@gmail.com](mailto:dwdjitendra2003@gmail.com)  
 🌐 Portfolio: [dwdjitendra-portfolio.vercel.app](https://dwdjitendra-portfolio.vercel.app/)  
 💼 LinkedIn: [dwdjitendra](https://www.linkedin.com/in/dwdjitendra/)  
 🚀 Full-Stack Developer specializing in MERN Stack & AI/ML Integration
