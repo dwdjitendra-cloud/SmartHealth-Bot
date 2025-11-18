@@ -24,6 +24,7 @@ const Navbar: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
+  const isAuthenticated = !!user;
 
   // Handle click outside to close dropdown
   useEffect(() => {
@@ -79,23 +80,25 @@ const Navbar: React.FC = () => {
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-1">
-              {mainNavLinks.map(({ path, label, icon: Icon }) => (
-                <Link
-                  key={path}
-                  to={path}
-                  className={`nav-link ${isActive(path) ? 'nav-link-active' : ''}`}
-                >
-                  <Icon className="h-4 w-4 mr-2" />
-                  {label}
-                </Link>
-              ))}
-            </div>
+            {/* Desktop Navigation (visible only when authenticated; hidden on mobile) */}
+            {isAuthenticated && (
+              <div className="hidden md:flex items-center space-x-8">
+                {mainNavLinks.map(({ path, label, icon: Icon }) => (
+                  <Link
+                    key={path}
+                    to={path}
+                    className={`nav-link flex items-center gap-2 ${isActive(path) ? 'nav-link-active' : ''}`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            )}
 
             {/* Right Side - User Menu & Mobile Toggle */}
             <div className="flex items-center space-x-4">
-              {user ? (
+              {isAuthenticated ? (
                 <div className="relative" ref={profileDropdownRef}>
                   <button
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -149,23 +152,13 @@ const Navbar: React.FC = () => {
                 </div>
               )}
 
-              {/* Mobile Menu Toggle */}
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-2 rounded-lg hover:bg-white/10 transition-colors duration-200"
-              >
-                {isMobileMenuOpen ? (
-                  <X className="h-5 w-5 text-white" />
-                ) : (
-                  <Menu className="h-5 w-5 text-white" />
-                )}
-              </button>
+              {/* Mobile nav items hidden (no toggle for mobile per requirement) */}
             </div>
           </div>
         </div>
 
         {/* Mobile Menu */}
-        {isMobileMenuOpen && (
+        {isMobileMenuOpen && user && !isAuthPage && (
           <div className="lg:hidden bg-healthcare-primary-800 border-t border-white/10 animate-slide-up">
             <div className="container-healthcare py-4">
               <div className="space-y-2">
