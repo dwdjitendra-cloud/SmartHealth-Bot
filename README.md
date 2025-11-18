@@ -524,7 +524,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For support, questions, or collaboration opportunities:
 
 **Developer Contact:**
-- 📧 **Email**: [jitendrakumar637587@gmail.com](mailto:jitendrakumar637587@gmail.com)
+- 📧 **Email**: [dwdjitendra2003@gmail.com](mailto:dwdjitendra2003@gmail.com)
 - 🌐 **Portfolio**: [dwdjitendra-portfolio.vercel.app](https://dwdjitendra-portfolio.vercel.app/)
 - 💼 **LinkedIn**: [dwdjitendra](https://www.linkedin.com/in/dwdjitendra/)
 - 🐛 **Issues**: Create an issue on [GitHub Issues](https://github.com/dwdjitendra-cloud/SmartHealth-Bot/issues)
@@ -575,4 +575,4 @@ Special thanks to the following resources and communities that made this project
 
 ---
 
-**Built with ❤️ by [Jitendra Kumar](https://www.linkedin.com/in/dwdjitendra/) | Connect for collaboration opportunities!**
+**Built with ❤️ by [Jitendra Kumar Dodwadiya](https://www.linkedin.com/in/dwdjitendra/) | Connect for collaboration opportunities!**

@@ -269,7 +269,7 @@ const Login: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full group inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-healthcare-primary-600 via-healthcare-accent-500 to-healthcare-primary-700 hover:from-healthcare-primary-700 hover:via-healthcare-accent-600 hover:to-healthcare-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-healthcare-accent-500 shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="btn-primary w-full group"
                 >
                   {loading ? (
                     <div className="flex items-center justify-center">
