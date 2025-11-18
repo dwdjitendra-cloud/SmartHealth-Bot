@@ -16,8 +16,7 @@ CORS(app, origins=[
     "http://localhost:5174", 
     "http://localhost:3000",
     "http://localhost:5001",
-    "https://smart-health-bot.vercel.app",
-    "https://smart-health-bot-ru2g.vercel.app"
+    "https://smart-health-bot.vercel.app"
 ])
 
 # Configure logging

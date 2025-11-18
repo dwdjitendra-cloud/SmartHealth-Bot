@@ -6,12 +6,12 @@ A comprehensive full-stack healthcare application with AI-powered symptom analys
 
 ## 🌐 Live Demo
 
-**🚀 [View Live Application](https://smart-health-bot-ru2g.vercel.app/)**
+**🚀 [View Live Application](https://smart-health-bot.vercel.app/)**
 
 Experience the SmartHealthBot application live! The frontend is deployed and fully functional on Vercel.
 
-[![Deployment Status](https://img.shields.io/badge/Deployment-Live-brightgreen?style=for-the-badge&logo=vercel)](https://smart-health-bot-ru2g.vercel.app/)
-[![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20TypeScript-blue?style=for-the-badge&logo=react)](https://smart-health-bot-ru2g.vercel.app/)
+[![Deployment Status](https://img.shields.io/badge/Deployment-Live-brightgreen?style=for-the-badge&logo=vercel)](https://smart-health-bot.vercel.app/)
+[![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20TypeScript-blue?style=for-the-badge&logo=react)](https://smart-health-bot.vercel.app/)
 [![Platform](https://img.shields.io/badge/Platform-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/)
 
 ## 👨‍💻 Developer
@@ -25,7 +25,7 @@ Experience the SmartHealthBot application live! The frontend is deployed and ful
 ## 🚀 Quick Start
 
 ### 🌐 Try the Live Application
-**[🔗 SmartHealthBot Live Demo](https://smart-health-bot-ru2g.vercel.app/)**
+**[🔗 SmartHealthBot Live Demo](https://smart-health-bot.vercel.app/)**
 
 ### 💻 Local Development Setup
 
@@ -373,7 +373,7 @@ Authorization: Bearer <token>
 ## 🚀 Deployment
 
 ### ✅ Frontend Deployment (Vercel) - LIVE
-**🌐 Live URL**: [https://smart-health-bot-ru2g.vercel.app/](https://smart-health-bot-ru2g.vercel.app/)
+**🌐 Live URL**: [https://smart-health-bot.vercel.app/](https://smart-health-bot.vercel.app/)
 
 The frontend is successfully deployed on Vercel with:
 - ✅ Automatic deployments from GitHub
@@ -398,7 +398,7 @@ The AI model service is successfully deployed on Render with:
  smarthealth-bot-
  ai-model-ihac.onrender.com
 smart-health-bot-             smarthealth-bot-            smarthealth-bot-
-ru2g.vercel.app              server.onrender.com         ai-model.onrender.com
+vercel.app                   server-j038.onrender.com    ai-model-ihac.onrender.com
         ↓                            ↓
 Environment Variables         MongoDB Atlas
 - VITE_API_URL               (Cloud Database)
@@ -412,7 +412,7 @@ Environment Variables         MongoDB Atlas
 
 | Service | URL | Status |
 |---------|-----|--------|
-| **Frontend** | https://smart-health-bot-ru2g.vercel.app/ | 🟢 Live |
+| **Frontend** | https://smart-health-bot.vercel.app/ | 🟢 Live |
 | **Backend API** | https://smarthealth-bot-server-j038.onrender.com/api | 🟢 Live |
 | **AI Model** | https://smarthealth-bot-ai-model-ihac.onrender.com | 🟢 Live |
 | **Database** | MongoDB Atlas | 🟢 Connected |
