@@ -34,7 +34,7 @@ interface RegisterData {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Configure axios defaults
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smarthealth-bot.onrender.com/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://smarthealth-bot-server-j038.onrender.com/api';
 axios.defaults.baseURL = API_BASE_URL;
 
 export const useAuth = () => {

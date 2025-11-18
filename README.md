@@ -383,28 +383,20 @@ The frontend is successfully deployed on Vercel with:
 - ✅ Production environment variables configured
 
 ### ✅ Backend Deployment (Render) - LIVE
-**🔧 Backend URL**: [https://smarthealth-bot-server.onrender.com](https://smarthealth-bot-server.onrender.com)
+**🔧 Backend URL**: [https://smarthealth-bot-server-j038.onrender.com](https://smarthealth-bot-server-j038.onrender.com)
 
 The backend service is successfully deployed on Render with:
-- ✅ Node.js 22.16.0 with Express server
-- ✅ MongoDB Atlas connection configured
-- ✅ All API endpoints active
-- ✅ CORS configured for frontend integration
 
 ### ✅ AI Model Deployment (Render) - LIVE
-**🤖 AI Model URL**: [https://smarthealth-bot-ai-model.onrender.com](https://smarthealth-bot-ai-model.onrender.com)
+**🤖 AI Model URL**: [https://smarthealth-bot-ai-model-ihac.onrender.com](https://smarthealth-bot-ai-model-ihac.onrender.com)
 
 The AI model service is successfully deployed on Render with:
-- ✅ Python 3.13.4 with compatible pandas/numpy
-- ✅ Flask API with CORS configured
-- ✅ Machine learning models loaded
-- ✅ Symptom analysis endpoints active
 
 ### 🏗️ Production Architecture
-
-```
-Frontend (Vercel)     ←→     Backend (Render)     ←→     AI Model (Render)
-React + TypeScript             Node.js + Express           Python + Flask
+ smarthealth-bot-
+ server-j038.onrender.com         
+ smarthealth-bot-
+ ai-model-ihac.onrender.com
 smart-health-bot-             smarthealth-bot-            smarthealth-bot-
 ru2g.vercel.app              server.onrender.com         ai-model.onrender.com
         ↓                            ↓
@@ -421,8 +413,8 @@ Environment Variables         MongoDB Atlas
 | Service | URL | Status |
 |---------|-----|--------|
 | **Frontend** | https://smart-health-bot-ru2g.vercel.app/ | 🟢 Live |
-| **Backend API** | https://smarthealth-bot-server.onrender.com/api | 🟢 Live |
-| **AI Model** | https://smarthealth-bot-ai-model.onrender.com | 🟢 Live |
+| **Backend API** | https://smarthealth-bot-server-j038.onrender.com/api | 🟢 Live |
+| **AI Model** | https://smarthealth-bot-ai-model-ihac.onrender.com | 🟢 Live |
 | **Database** | MongoDB Atlas | 🟢 Connected |
 
 ### 🚀 Deployment Instructions
@@ -437,7 +429,7 @@ npm run build
 3. Set environment variables for API endpoints
 
 ### ✅ AI Model Deployment (Render) - LIVE
-**🤖 AI Model URL**: [https://smarthealth-bot-ai-model.onrender.com](https://smarthealth-bot-ai-model.onrender.com)
+**🤖 AI Model URL**: [https://smarthealth-bot-ai-model-ihac.onrender.com](https://smarthealth-bot-ai-model-ihac.onrender.com)
 
 The AI model service is successfully deployed on Render with:
 - ✅ Python 3.13.4 with compatible pandas/numpy
@@ -446,7 +438,7 @@ The AI model service is successfully deployed on Render with:
 - ✅ Symptom analysis endpoints active
 
 ### ✅ Backend Deployment (Render) - LIVE
-**🔧 Backend URL**: [https://smarthealth-bot-server.onrender.com](https://smarthealth-bot-server.onrender.com)
+**🔧 Backend URL**: [https://smarthealth-bot-server-j038.onrender.com](https://smarthealth-bot-server-j038.onrender.com)
 
 The backend service is successfully deployed on Render with:
 - ✅ Node.js 22.16.0 with Express server
